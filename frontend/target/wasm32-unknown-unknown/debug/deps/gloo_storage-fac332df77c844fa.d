@@ -1,0 +1,10 @@
+D:\Dev\KonekanLuncher\frontend\target\wasm32-unknown-unknown\debug\deps\libgloo_storage-fac332df77c844fa.rmeta: C:\Users\lucas\.cargo\registry\src\index.crates.io-6f17d22bba15001f\gloo-storage-0.3.0\src\lib.rs C:\Users\lucas\.cargo\registry\src\index.crates.io-6f17d22bba15001f\gloo-storage-0.3.0\src\errors.rs C:\Users\lucas\.cargo\registry\src\index.crates.io-6f17d22bba15001f\gloo-storage-0.3.0\src\local_storage.rs C:\Users\lucas\.cargo\registry\src\index.crates.io-6f17d22bba15001f\gloo-storage-0.3.0\src\session_storage.rs
+
+D:\Dev\KonekanLuncher\frontend\target\wasm32-unknown-unknown\debug\deps\libgloo_storage-fac332df77c844fa.rlib: C:\Users\lucas\.cargo\registry\src\index.crates.io-6f17d22bba15001f\gloo-storage-0.3.0\src\lib.rs C:\Users\lucas\.cargo\registry\src\index.crates.io-6f17d22bba15001f\gloo-storage-0.3.0\src\errors.rs C:\Users\lucas\.cargo\registry\src\index.crates.io-6f17d22bba15001f\gloo-storage-0.3.0\src\local_storage.rs C:\Users\lucas\.cargo\registry\src\index.crates.io-6f17d22bba15001f\gloo-storage-0.3.0\src\session_storage.rs
+
+D:\Dev\KonekanLuncher\frontend\target\wasm32-unknown-unknown\debug\deps\gloo_storage-fac332df77c844fa.d: C:\Users\lucas\.cargo\registry\src\index.crates.io-6f17d22bba15001f\gloo-storage-0.3.0\src\lib.rs C:\Users\lucas\.cargo\registry\src\index.crates.io-6f17d22bba15001f\gloo-storage-0.3.0\src\errors.rs C:\Users\lucas\.cargo\registry\src\index.crates.io-6f17d22bba15001f\gloo-storage-0.3.0\src\local_storage.rs C:\Users\lucas\.cargo\registry\src\index.crates.io-6f17d22bba15001f\gloo-storage-0.3.0\src\session_storage.rs
+
+C:\Users\lucas\.cargo\registry\src\index.crates.io-6f17d22bba15001f\gloo-storage-0.3.0\src\lib.rs:
+C:\Users\lucas\.cargo\registry\src\index.crates.io-6f17d22bba15001f\gloo-storage-0.3.0\src\errors.rs:
+C:\Users\lucas\.cargo\registry\src\index.crates.io-6f17d22bba15001f\gloo-storage-0.3.0\src\local_storage.rs:
+C:\Users\lucas\.cargo\registry\src\index.crates.io-6f17d22bba15001f\gloo-storage-0.3.0\src\session_storage.rs:
