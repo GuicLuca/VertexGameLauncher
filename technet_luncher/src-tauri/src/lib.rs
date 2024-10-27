@@ -103,7 +103,7 @@ fn application_setup(app: &mut App) {
     tauri::async_runtime::spawn(async move {
         // initialize the app here
         println!("Initializing...");
-        thread::sleep(std::time::Duration::from_secs(3));
+        thread::sleep(std::time::Duration::from_millis(500));
         println!("Done initializing.");
 
         // After it's done, close the splashscreen and display the main window
