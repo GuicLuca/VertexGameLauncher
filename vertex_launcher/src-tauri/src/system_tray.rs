@@ -1,22 +1,18 @@
-use tauri::{App, AppHandle, Manager};
 use tauri::menu::{Menu, MenuEvent, MenuItem};
 use tauri::tray::{TrayIcon, TrayIconBuilder, TrayIconEvent};
+use tauri::{App, AppHandle, Manager};
 
 pub fn setup_system_tray(app: &App) -> Result<(), Box<dyn std::error::Error>> {
     TrayIconBuilder::with_id("tray")
         .icon(app.default_window_icon().unwrap().clone())
         .menu_on_left_click(false)
-        .on_menu_event(|app, event| {
-            match on_tray_menu_event(app, event) {
-                Ok(_) => (),
-                Err(e) => eprintln!("Error handling tray menu event: {:?}", e),
-            }
+        .on_menu_event(|app, event| match on_tray_menu_event(app, event) {
+            Ok(_) => (),
+            Err(e) => eprintln!("Error handling tray menu event: {:?}", e),
         })
-        .on_tray_icon_event(|tray, event| {
-            match on_tray_icon_event(tray, &event) {
-                Ok(_) => (),
-                Err(e) => eprintln!("Error handling tray icon event: {:?}", e),
-            }
+        .on_tray_icon_event(|tray, event| match on_tray_icon_event(tray, &event) {
+            Ok(_) => (),
+            Err(e) => eprintln!("Error handling tray icon event: {:?}", e),
         })
         .build(app)?;
 
@@ -31,27 +27,30 @@ pub fn update_tray_menu(app: &AppHandle) -> Result<(), Box<dyn std::error::Error
     if let Some(window) = app.get_webview_window("main") {
         if window.is_visible().unwrap() == false {
             hide_item.set_text("Show launcher")?;
-        }else { 
+        } else {
             hide_item.set_text("Hide launcher")?;
         }
     }
-    
-    // Quit 
+
+    // Quit
     let quit_item = MenuItem::with_id(app, "quit", "Quit", true, None::<&str>)?;
-    
-    
+
     // Combine menu elements into a menu
     let menu = Menu::with_items(app, &[&hide_item, &quit_item])?;
-    
+
     // Add the menu to the tray
     Ok(app.tray_by_id("tray").unwrap().set_menu(Some(menu))?)
 }
 
-pub fn on_tray_menu_event(app: &AppHandle, event: MenuEvent) -> Result<(), Box<dyn std::error::Error>> {
+pub fn on_tray_menu_event(
+    app: &AppHandle,
+    event: MenuEvent,
+) -> Result<(), Box<dyn std::error::Error>> {
     println!("Event tray menu received : {}", event.id.as_ref());
     match event.id.as_ref() {
         "quit" => {
-            std::process::exit(0);
+            crate::quit_app(app.clone());
+            Ok(())
         }
         "hide" => {
             println!("Hide menu item clicked");
@@ -73,12 +72,15 @@ pub fn on_tray_menu_event(app: &AppHandle, event: MenuEvent) -> Result<(), Box<d
     }
 }
 
-fn on_tray_icon_event(tray: &TrayIcon, event: &TrayIconEvent) -> Result<(), Box<dyn std::error::Error>>{
+fn on_tray_icon_event(
+    tray: &TrayIcon,
+    event: &TrayIconEvent,
+) -> Result<(), Box<dyn std::error::Error>> {
     match event {
         TrayIconEvent::DoubleClick { .. } => {
             dbg!("system tray received a double click");
             let app = tray.app_handle();
-            
+
             if let Some(window) = app.get_webview_window("main") {
                 if window.is_visible().unwrap() {
                     window.hide().unwrap();
@@ -86,7 +88,7 @@ fn on_tray_icon_event(tray: &TrayIcon, event: &TrayIconEvent) -> Result<(), Box<
                     window.show().unwrap();
                 }
             }
-            
+
             update_tray_menu(app)?;
             Ok(())
         }

@@ -1,0 +1,1 @@
+pub(crate) static GAME_SERVER_ADDR: &str = "https://www.dropbox.com/scl/fi/a9i2fyejxce7ka4gc7a75/Games.json?rlkey=scfhkrbowkubx1e8mtatwr56c&st=aiim0f18&dl=1";
