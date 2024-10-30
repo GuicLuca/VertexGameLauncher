@@ -42,6 +42,10 @@ function gameList() {
                 </div>
             </div>
         </div>
+        {/* Launcher options */}
+        <div className='option btn-strd'>
+            Options
+        </div>
     </div>
   )
 }

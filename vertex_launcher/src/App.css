@@ -116,13 +116,27 @@ button {
     background-color: rgba(15, 15, 15, 0.4117647059);
   }
 }
+.btn-strd {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 225px;
+  height: 75px;
+  background-color: orange;
+  border-radius: 16px;
+  margin: 0 auto;
+  color: white;
+  font-size: 1.4em;
+}
+
 .launcher {
   display: flex;
 }
 
 .gameList {
-  width: 30%;
+  width: 36%;
   display: flex;
+  position: relative;
   flex-direction: column;
   background-color: #646cff;
   height: 100vh;
@@ -147,6 +161,8 @@ button {
 .gameList .jeu img {
   width: 30%;
   margin: 0;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 .gameList .jeu div {
   display: flex;
@@ -158,6 +174,12 @@ button {
 }
 .gameList .jeu div p {
   margin: 0;
+}
+.gameList .option {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  translate: -50%;
 }
 
 .gamePage {
@@ -172,8 +194,9 @@ button {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: auto;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 .gamePage .infos-jeu {
   display: flex;
@@ -185,20 +208,47 @@ button {
   width: 30%;
   border-radius: 16px;
 }
+.gamePage .infos-jeu div h3 {
+  margin-top: 0;
+}
 .gamePage .infos-jeu div p {
   margin: 0;
 }
-.gamePage .start-btn {
-  border-radius: 16px;
+.gamePage .game-os {
   position: absolute;
-  bottom: 10px;
-  right: 10px;
-  text-align: center;
-  width: 225px;
+  bottom: 16px;
+  left: 16px;
+  width: 40%;
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 0 8px;
+  border-radius: 16px;
+}
+.gamePage .game-os > div {
   height: 75px;
-  background-color: orange;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.gamePage .game-os > div h3 {
+  margin: 4px 0;
+}
+.gamePage .game-os > div div {
+  display: flex;
+  justify-content: space-between;
+}
+.gamePage .game-os > div div p {
+  margin: 0;
+}
+.gamePage .start-btn {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
 }
 .gamePage .start-btn p {
   margin: 0;
-  font-size: 0.7em;
+  font-size: 0.4em;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  translate: -50%;
 }/*# sourceMappingURL=App.css.map */
