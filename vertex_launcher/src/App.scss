@@ -1,4 +1,4 @@
-body {
+body{
   margin: 0;
 }
 
@@ -9,14 +9,15 @@ body {
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafb);
 }
-
 :root {
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
   font-size: 16px;
   line-height: 24px;
   font-weight: 400;
+
   color: #0f0f0f;
   background-color: #f6f6f6;
+
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -84,7 +85,6 @@ button {
 button:hover {
   border-color: #396cd8;
 }
-
 button:active {
   border-color: #396cd8;
   background-color: #e8e8e8;
@@ -104,101 +104,105 @@ button {
     color: #f6f6f6;
     background-color: #2f2f2f;
   }
+
   a:hover {
     color: #24c8db;
   }
+
   input,
   button {
     color: #ffffff;
-    background-color: rgba(15, 15, 15, 0.5960784314);
+    background-color: #0f0f0f98;
   }
   button:active {
-    background-color: rgba(15, 15, 15, 0.4117647059);
+    background-color: #0f0f0f69;
   }
 }
-.launcher {
+
+.launcher{
   display: flex;
 }
 
-.gameList {
+.gameList{
   width: 30%;
   display: flex;
   flex-direction: column;
   background-color: #646cff;
   height: 100vh;
-}
-.gameList img {
-  align-items: center;
-  margin: 0 auto;
-  width: 200px;
-}
-.gameList span {
-  height: 2px;
-  margin: 8px 4px;
-  background-color: #0f0f0f;
-}
-.gameList .jeu {
-  display: flex;
-  background-color: grey;
-  justify-content: space-around;
-  padding: 4px 16px;
-  margin-bottom: 8px;
-}
-.gameList .jeu img {
-  width: 30%;
-  margin: 0;
-}
-.gameList .jeu div {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-.gameList .jeu div h3 {
-  margin: 0;
-}
-.gameList .jeu div p {
-  margin: 0;
+  img{
+    align-items: center;
+    margin: 0 auto;
+    width: 200px;
+  }
+  span{
+    height: 2px;
+    margin: 8px 4px;
+    background-color: #0f0f0f;
+    
+  }
+  .jeu{
+    display: flex;
+    background-color: grey;
+    justify-content: space-around;
+    padding: 4px 16px;
+    margin-bottom: 8px;
+    img{
+      width: 30%;
+      margin: 0;
+    }
+    div{
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      h3{
+        margin: 0;
+      }
+      p{
+        margin: 0;
+      }
+    }
+  }
 }
 
-.gamePage {
+.gamePage{
   position: relative;
   overflow: hidden;
   color: white;
   width: 100%;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.40);
+  .background-img{
+    z-index: -10;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+  }
+  .infos-jeu{
+    display: flex;
+    justify-content: space-around;
+    div{
+      border: 1px solid white;
+      padding: 16px;
+      width: 30%;
+      border-radius: 16px;
+      p{
+        margin: 0;
+      }
+    }
+  }
+  .start-btn{
+    border-radius: 16px;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    text-align: center;
+    width: 225px;
+    height: 75px;
+    background-color: orange;
+    p{
+      margin: 0;
+      font-size: 0.7em;
+    }
+  }
 }
-.gamePage .background-img {
-  z-index: -10;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: auto;
-}
-.gamePage .infos-jeu {
-  display: flex;
-  justify-content: space-around;
-}
-.gamePage .infos-jeu div {
-  border: 1px solid white;
-  padding: 16px;
-  width: 30%;
-  border-radius: 16px;
-}
-.gamePage .infos-jeu div p {
-  margin: 0;
-}
-.gamePage .start-btn {
-  border-radius: 16px;
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  text-align: center;
-  width: 225px;
-  height: 75px;
-  background-color: orange;
-}
-.gamePage .start-btn p {
-  margin: 0;
-  font-size: 0.7em;
-}/*# sourceMappingURL=App.css.map */
