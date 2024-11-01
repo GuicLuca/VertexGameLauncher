@@ -9,7 +9,7 @@ function gameList() {
         {/* regroupement de tous les jeux */}
         <div>
             {/* Jeu */}
-            <div className='jeu'>
+            <div className='game active-game'>
                 {/* logo */}
                 <img src="/TechNet_Game_Launcher.png" alt="" />
                 <div>
@@ -20,7 +20,7 @@ function gameList() {
                 </div>
             </div>
             {/* Jeu */}
-            <div className='jeu'>
+            <div className='game'>
                 {/* logo */}
                 <img src="/TechNet_Game_Launcher.png" alt="" />
                 <div>
@@ -31,7 +31,7 @@ function gameList() {
                 </div>
             </div>
             {/* Jeu */}
-            <div className='jeu'>
+            <div className='game'>
                 {/* logo */}
                 <img src="/TechNet_Game_Launcher.png" alt="" />
                 <div>

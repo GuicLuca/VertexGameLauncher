@@ -1,5 +1,7 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 body {
   margin: 0;
+  font-family: "Poppins";
 }
 
 .logo.vite:hover {
@@ -122,11 +124,17 @@ button {
   justify-content: center;
   width: 225px;
   height: 75px;
-  background-color: orange;
+  background-color: #2A2A40;
   border-radius: 16px;
   margin: 0 auto;
-  color: white;
+  color: #E0E0E6;
   font-size: 1.4em;
+  transition: all 0.3s;
+}
+.btn-strd:hover {
+  transition: all 0.3s;
+  background-color: #4A6A9C;
+  cursor: pointer;
 }
 
 .launcher {
@@ -138,45 +146,54 @@ button {
   display: flex;
   position: relative;
   flex-direction: column;
-  background-color: #646cff;
+  background-color: #1C1C28;
   height: 100vh;
+  color: #E0E0E6;
 }
 .gameList img {
   align-items: center;
   margin: 0 auto;
-  width: 200px;
+  width: 150px;
 }
 .gameList span {
   height: 2px;
   margin: 8px 4px;
-  background-color: #0f0f0f;
+  background-color: #E0E0E6;
 }
-.gameList .jeu {
+.gameList .active-game {
+  background: linear-gradient(to right, rgba(190, 190, 190, 0.368627451) 0%, rgba(151, 151, 151, 0) 90%);
+  border-left: 2px solid #B0B0C3;
+}
+.gameList .game {
   display: flex;
-  background-color: grey;
   justify-content: space-around;
   padding: 4px 16px;
   margin-bottom: 8px;
+  color: #E0E0E6;
 }
-.gameList .jeu img {
+.gameList .game img {
   width: 30%;
   margin: 0;
   -o-object-fit: contain;
      object-fit: contain;
 }
-.gameList .jeu div {
+.gameList .game div {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  margin: 0 8px;
 }
-.gameList .jeu div h3 {
+.gameList .game div h3 {
   margin: 0;
 }
-.gameList .jeu div p {
+.gameList .game div p {
   margin: 0;
+  font-size: 0.6em;
 }
 .gameList .option {
   position: absolute;
+  width: 175px;
+  height: 50px;
   bottom: 16px;
   left: 50%;
   translate: -50%;
@@ -185,9 +202,10 @@ button {
 .gamePage {
   position: relative;
   overflow: hidden;
-  color: white;
+  color: #E0E0E6;
   width: 100%;
   background-color: rgba(0, 0, 0, 0.4);
+  color: #E0E0E6;
 }
 .gamePage .background-img {
   z-index: -10;
@@ -198,15 +216,25 @@ button {
   -o-object-fit: cover;
      object-fit: cover;
 }
+.gamePage h1 {
+  text-shadow: 1px 1px 7px rgba(255, 255, 255, 0.41);
+  -webkit-backdrop-filter: blur(4px);
+          backdrop-filter: blur(4px);
+  font-size: 3.2em;
+  padding: 32px 0;
+  margin: 0;
+}
 .gamePage .infos-jeu {
   display: flex;
   justify-content: space-around;
+  margin-top: 16vh;
 }
 .gamePage .infos-jeu div {
-  border: 1px solid white;
+  border: 1px solid #B0B0C3;
   padding: 16px;
-  width: 30%;
+  width: 40%;
   border-radius: 16px;
+  background-color: rgba(0, 0, 0, 0.7);
 }
 .gamePage .infos-jeu div h3 {
   margin-top: 0;
@@ -218,7 +246,6 @@ button {
   position: absolute;
   bottom: 16px;
   left: 16px;
-  width: 40%;
   background-color: rgba(0, 0, 0, 0.8);
   padding: 0 8px;
   border-radius: 16px;
