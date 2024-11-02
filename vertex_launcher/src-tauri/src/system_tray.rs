@@ -1,3 +1,4 @@
+use crate::quit_app;
 use tauri::menu::{Menu, MenuEvent, MenuItem};
 use tauri::tray::{TrayIcon, TrayIconBuilder, TrayIconEvent};
 use tauri::{App, AppHandle, Manager};
@@ -49,7 +50,7 @@ pub fn on_tray_menu_event(
     println!("Event tray menu received : {}", event.id.as_ref());
     match event.id.as_ref() {
         "quit" => {
-            crate::quit_app(app.clone());
+            quit_app(app.clone());
             Ok(())
         }
         "hide" => {

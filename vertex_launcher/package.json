@@ -11,11 +11,13 @@
   },
   "dependencies": {
     "@tauri-apps/api": ">=2.0.0",
+    "@tauri-apps/plugin-log": "^2.0.0",
     "@tauri-apps/plugin-shell": ">=2.0.0",
     "i": "^0.3.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "sass": "^1.80.5"
+    "sass": "^1.80.5",
+    "tauri-plugin-log-api": "github:tauri-apps/tauri-plugin-log"
   },
   "devDependencies": {
     "@tauri-apps/cli": ">=2.0.0",
