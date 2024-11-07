@@ -166,10 +166,11 @@ button {
 }
 .gameList .game {
   display: flex;
-  justify-content: space-around;
-  padding: 4px 16px;
+  padding: 2% 5%;
   margin-bottom: 8px;
   color: #E0E0E6;
+  width: 90%;
+  cursor: pointer;
 }
 .gameList .game img {
   width: 30%;
@@ -181,7 +182,8 @@ button {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin: 0 8px;
+  margin: 0 5%;
+  max-width: 60%;
 }
 .gameList .game div h3 {
   margin: 0;
@@ -221,37 +223,55 @@ button {
   -webkit-backdrop-filter: blur(4px);
           backdrop-filter: blur(4px);
   font-size: 3.2em;
-  padding: 32px 0;
+  padding: 32px 0 0 0;
   margin: 0;
+  line-height: 1;
+}
+.gamePage h1 + h3 {
+  -webkit-backdrop-filter: blur(4px);
+          backdrop-filter: blur(4px);
+  text-align: center;
+  margin-top: 0;
+  font-weight: 300;
 }
 .gamePage .infos-jeu {
+  position: absolute;
   display: flex;
   justify-content: space-around;
-  margin-top: 16vh;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  width: 90%;
 }
 .gamePage .infos-jeu div {
   border: 1px solid #B0B0C3;
+  max-height: 200px;
   padding: 16px;
   width: 40%;
   border-radius: 16px;
   background-color: rgba(0, 0, 0, 0.7);
+  text-overflow: ellipsis;
 }
 .gamePage .infos-jeu div h3 {
   margin-top: 0;
 }
 .gamePage .infos-jeu div p {
+  max-height: 170px;
+  overflow: scroll;
+  text-overflow: ellipsis;
   margin: 0;
 }
 .gamePage .game-os {
   position: absolute;
   bottom: 16px;
   left: 16px;
+  max-width: 60%;
   background-color: rgba(0, 0, 0, 0.8);
   padding: 0 8px;
   border-radius: 16px;
 }
 .gamePage .game-os > div {
-  height: 75px;
+  padding: 4px 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -261,10 +281,12 @@ button {
 }
 .gamePage .game-os > div div {
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
 }
 .gamePage .game-os > div div p {
   margin: 0;
+  margin-right: 32px;
+  white-space: nowrap;
 }
 .gamePage .start-btn {
   position: absolute;

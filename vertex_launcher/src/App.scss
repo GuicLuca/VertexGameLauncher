@@ -189,10 +189,11 @@ button {
   }
   .game {
     display: flex;
-    justify-content: space-around;
-    padding: 4px 16px;
+    padding: 2% 5%;
     margin-bottom: 8px;
     color: $text-primary;
+    width: 90%;
+    cursor: pointer;
 
     img {
       width: 30%;
@@ -204,7 +205,8 @@ button {
       display: flex;
       flex-direction: column;
       justify-content: center;
-      margin: 0 8px;
+      margin: 0 5%;
+      max-width: 60%;
 
       h3 {
         margin: 0;
@@ -247,25 +249,41 @@ button {
     text-shadow: 1px 1px 7px rgba(255, 255, 255, 0.41);
     backdrop-filter: blur(4px);
     font-size: 3.2em;
-    padding: 32px 0;
+    padding: 32px 0 0 0;
     margin: 0;
+    line-height: 1;
+    +h3{
+      backdrop-filter: blur(4px);
+      text-align: center;
+      margin-top: 0;
+      font-weight: 300;
+    }
   }
   .infos-jeu {
+    position: absolute;
     display: flex;
     justify-content: space-around;
-    margin-top: 16vh;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    width: 90%;
     div {
       border: 1px solid $text-secondary;
+      max-height: 200px;
       padding: 16px;
       width: 40%;
       border-radius: 16px;
       background-color: rgba(0, 0, 0, 0.7);
+      text-overflow: ellipsis;
 
       h3 {
         margin-top: 0;
       }
 
       p {
+        max-height: 170px;
+        overflow: scroll;
+        text-overflow: ellipsis;
         margin: 0;
       }
     }
@@ -275,11 +293,12 @@ button {
     position: absolute;
     bottom: 16px;
     left: 16px;
+    max-width: 60%;
     background-color: rgba(0, 0, 0, 0.8);
     padding: 0 8px;
     border-radius: 16px;
     >div {
-      height: 75px;
+      padding: 4px 0;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -288,9 +307,11 @@ button {
       }
       div {
         display: flex;
-        justify-content: space-between;
+        flex-wrap: wrap;
         p{
           margin: 0;
+          margin-right: 32px;
+          white-space: nowrap;
         }
       }
     }
