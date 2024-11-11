@@ -158,13 +158,22 @@ button {
 .gameList span {
   height: 2px;
   margin: 8px 4px;
+  margin-bottom: 0;
   background-color: #E0E0E6;
 }
 .gameList .active-game {
   background: linear-gradient(to right, rgba(190, 190, 190, 0.368627451) 0%, rgba(151, 151, 151, 0) 90%);
   border-left: 2px solid #B0B0C3;
 }
-.gameList .game {
+.gameList .games {
+  overflow-y: auto;
+  scrollbar-width: thin;
+  overflow-x: hidden;
+  padding-top: 8px;
+  padding-bottom: 100px;
+  scrollbar-color: #2F2F45 #1C1C28;
+}
+.gameList .games .game {
   display: flex;
   padding: 2% 5%;
   margin-bottom: 8px;
@@ -172,23 +181,23 @@ button {
   width: 90%;
   cursor: pointer;
 }
-.gameList .game img {
+.gameList .games .game img {
   width: 30%;
   margin: 0;
   -o-object-fit: contain;
      object-fit: contain;
 }
-.gameList .game div {
+.gameList .games .game div {
   display: flex;
   flex-direction: column;
   justify-content: center;
   margin: 0 5%;
   max-width: 60%;
 }
-.gameList .game div h3 {
+.gameList .games .game div h3 {
   margin: 0;
 }
-.gameList .game div p {
+.gameList .games .game div p {
   margin: 0;
   font-size: 0.6em;
 }
@@ -218,20 +227,20 @@ button {
   -o-object-fit: cover;
      object-fit: cover;
 }
-.gamePage h1 {
-  text-shadow: 1px 1px 7px rgba(255, 255, 255, 0.41);
+.gamePage .title {
   -webkit-backdrop-filter: blur(4px);
           backdrop-filter: blur(4px);
+  padding: 16px 0;
+}
+.gamePage .title h1 {
+  text-shadow: 1px 1px 7px rgba(255, 255, 255, 0.41);
   font-size: 3.2em;
-  padding: 32px 0 0 0;
   margin: 0;
   line-height: 1;
 }
-.gamePage h1 + h3 {
-  -webkit-backdrop-filter: blur(4px);
-          backdrop-filter: blur(4px);
+.gamePage .title h1 + h3 {
   text-align: center;
-  margin-top: 0;
+  margin: 0;
   font-weight: 300;
 }
 .gamePage .infos-jeu {
@@ -257,11 +266,14 @@ button {
 }
 .gamePage .infos-jeu div p {
   max-height: 170px;
-  overflow: scroll;
+  overflow-y: auto;
+  scrollbar-color: #2F2F45 rgba(0, 0, 0, 0);
+  scrollbar-width: thin;
+  overflow-x: hidden;
   text-overflow: ellipsis;
   margin: 0;
 }
-.gamePage .game-os {
+.gamePage .game-feat {
   position: absolute;
   bottom: 16px;
   left: 16px;
@@ -270,20 +282,20 @@ button {
   padding: 0 8px;
   border-radius: 16px;
 }
-.gamePage .game-os > div {
+.gamePage .game-feat > div {
   padding: 4px 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
-.gamePage .game-os > div h3 {
+.gamePage .game-feat > div h3 {
   margin: 4px 0;
 }
-.gamePage .game-os > div div {
+.gamePage .game-feat > div div {
   display: flex;
   flex-wrap: wrap;
 }
-.gamePage .game-os > div div p {
+.gamePage .game-feat > div div p {
   margin: 0;
   margin-right: 32px;
   white-space: nowrap;

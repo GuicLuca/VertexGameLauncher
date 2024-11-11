@@ -4,27 +4,30 @@ import { useGame } from './gameContext.jsx'
 function gamePage() {
     const { selectedGame } = useGame();
     const isDownloaded = false;
-    if (!selectedGame) return <div>Chargement du jeu...</div>;
+    if (!selectedGame) return <div>Vous n'avez pas de jeux</div>;
     return (
         <div className='gamePage'>
-            {/* image background du jeu */}
+            {/*  background image of the selected game */}
             <img className='background-img' src={selectedGame.background_image} alt={selectedGame.title} />
-            {/* nom du jeu */}
-            <h1>{selectedGame.title}</h1>
-            <h3>{selectedGame.subtitle}</h3>
+            {/* game name */}
+            <div className='title'>
+                <h1>{selectedGame.title}</h1>
+                <h3>{selectedGame.subtitle}</h3>
+            </div>
             <div className='infos-jeu'>
                 <div>
-                    {/* description du jeu */}
+                    {/* game desc */}
                     <h3>Game Description</h3>
                     <p>{selectedGame.description}</p>
                 </div>
                 <div>
-                    {/* information sur la dernière maj */}
+                    {/* infos of the last update*/}
                     <h3>Lastest Update</h3>
                     <p>Informations sur la dernière mise à jour...</p>
                 </div>
             </div>
-            <div className='game-os'>
+            {/* game features */}
+            <div className='game-feat'>
                 <div>
                     <h3>Tags</h3>
                     <div>

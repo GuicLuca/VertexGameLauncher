@@ -5,21 +5,21 @@ function gameList({ games }) {
     const { selectedGame, setSelectedGame } = useGame();
     return (
         <div className='gameList'>
-            {/* logo du launcher */}
+            {/* Launcher logo */}
             <img src="/TechNet_Game_Launcher.png" alt="" />
             <span></span>
-            {/* regroupement de tous les jeux */}
-            <div>
+            {/* Packing of all games*/}
+            <div className='games'>
                 {games.map((game, index) => (
                     <div
                         key={index}
                         className={`game ${selectedGame && selectedGame.title === game.title ? 'active-game' : ''}`}
-                        onClick={() => setSelectedGame(game)} // Mettre à jour le jeu sélectionné
+                        onClick={() => setSelectedGame(game)} // Update the selected game
                     >
                         {/* Logo */}
                         <img src={game.navigation_icon} alt={`${game.title} logo`} />
                         <div>
-                            {/* Titre */}
+                            {/* Title */}
                             <h3>{game.title}</h3>
                             {/* Version */}
                             <p>Version {game.version}</p>

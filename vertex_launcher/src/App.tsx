@@ -9,7 +9,7 @@ import { info } from "tauri-plugin-log-api";
 
 function App() {
   const [games, setGames] = useState([]);
-  const { setSelectedGame } = useGame(); // Utiliser le setter de selectedGame du contexte
+  const { setSelectedGame } = useGame(); // use the setter of selectedGame from the contexte
 
   // async function greet() {
   //   // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
@@ -17,12 +17,12 @@ function App() {
   // }
   
   useEffect(() => {
-    // Charger le JSON local
+    // Load the local Json
     fetch('/Games.json')
       .then((response) => response.json())
       .then((data) => {
         setGames(data.games);
-        // Sélectionner le premier jeu comme jeu par défaut si la liste n'est pas vide
+        // Select the first game inside the json by default
         if (data.games.length > 0) {
           setSelectedGame(data.games[0]);
         }
@@ -32,7 +32,7 @@ function App() {
 
   return (
     <div className="launcher App">
-      <GameList games={games} /> {/* Passer les jeux à GameList */}
+      <GameList games={games} /> {/* Give the game list to GameList */}
       <GamePage />
     </div>
   );

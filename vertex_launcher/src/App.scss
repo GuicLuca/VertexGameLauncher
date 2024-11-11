@@ -181,42 +181,53 @@ button {
   span {
     height: 2px;
     margin: 8px 4px;
+    margin-bottom: 0;
     background-color: $text-primary;
   }
   .active-game{
     background: linear-gradient(to right, #bebebe5e 0%, #97979700 90%);
     border-left: 2px solid $text-secondary;
   }
-  .game {
-    display: flex;
-    padding: 2% 5%;
-    margin-bottom: 8px;
-    color: $text-primary;
-    width: 90%;
-    cursor: pointer;
 
-    img {
-      width: 30%;
-      margin: 0;
-      object-fit: contain;
-    }
-
-    div {
+  
+  .games{
+    overflow-y: auto;
+    scrollbar-width: thin;
+    overflow-x: hidden;
+    padding-top: 8px;
+    padding-bottom: 100px;
+    scrollbar-color: $background-hover $background-color;
+    
+    .game {
       display: flex;
-      flex-direction: column;
-      justify-content: center;
-      margin: 0 5%;
-      max-width: 60%;
-
-      h3 {
+      padding: 2% 5%;
+      margin-bottom: 8px;
+      color: $text-primary;
+      width: 90%;
+      cursor: pointer;
+  
+      img {
+        width: 30%;
         margin: 0;
+        object-fit: contain;
       }
-
-      p {
-        margin: 0;
-        font-size: 0.6em;
+      div {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin: 0 5%;
+        max-width: 60%;
+  
+        h3 {
+          margin: 0;
+        }
+  
+        p {
+          margin: 0;
+          font-size: 0.6em;
+        }
       }
-    }
+    }   
   }
 
   .option{
@@ -245,18 +256,19 @@ button {
     height: 100%;
     object-fit: cover;
   }
-  h1{
-    text-shadow: 1px 1px 7px rgba(255, 255, 255, 0.41);
+  .title{
     backdrop-filter: blur(4px);
-    font-size: 3.2em;
-    padding: 32px 0 0 0;
-    margin: 0;
-    line-height: 1;
-    +h3{
-      backdrop-filter: blur(4px);
-      text-align: center;
-      margin-top: 0;
-      font-weight: 300;
+    padding: 16px 0;
+    h1{
+      text-shadow: 1px 1px 7px rgba(255, 255, 255, 0.41);
+      font-size: 3.2em;
+      margin: 0;
+      line-height: 1;
+      +h3{
+        text-align: center;
+        margin: 0;
+        font-weight: 300;
+      }
     }
   }
   .infos-jeu {
@@ -282,14 +294,17 @@ button {
 
       p {
         max-height: 170px;
-        overflow: scroll;
+        overflow-y: auto;
+        scrollbar-color: $background-hover rgba(0, 0, 0, 0) ;
+        scrollbar-width: thin;
+        overflow-x: hidden;
         text-overflow: ellipsis;
         margin: 0;
       }
     }
   }
 
-  .game-os {
+  .game-feat {
     position: absolute;
     bottom: 16px;
     left: 16px;

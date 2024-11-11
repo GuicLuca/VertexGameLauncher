@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useState } from 'react';
 
-// Création du contexte
+// Context creation
 const GameContext = createContext();
 
-// Fournisseur de contexte pour envelopper l'application
+// Context provider to wrap the application
 export const GameProvider = ({ children }) => {
   const [selectedGame, setSelectedGame] = useState(null);
 
@@ -14,5 +14,5 @@ export const GameProvider = ({ children }) => {
   );
 };
 
-// Hook pour utiliser le contexte facilement
+// Hook to use easly the context
 export const useGame = () => useContext(GameContext);
