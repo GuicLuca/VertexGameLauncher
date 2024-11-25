@@ -10,6 +10,19 @@
     "shell:allow-open",
     "http:default",
     "store:default",
-    "log:default"
+    "log:default",
+    "fs:default",
+    {
+      "identifier": "fs:scope",
+      "allow": [
+        {
+          "path": "$APPDATA"
+        },
+        {
+          "path": "$APPDATA/**"
+        }
+      ]
+    },
+    "fs:default"
   ]
 }

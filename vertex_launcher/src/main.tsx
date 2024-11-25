@@ -13,7 +13,7 @@ import { warn, debug, trace, info, error } from '@tauri-apps/plugin-log';
  * @param fnName LogLevel
  * @param logger Logger function
  */
-function forwardConsole(
+export function forwardConsole(
   fnName: 'log' | 'debug' | 'info' | 'warn' | 'error',
   logger: (message: string) => Promise<void>
 ) {
@@ -33,31 +33,28 @@ forwardConsole('error', error);
 //~ End of logging config ==========
 
 // ========= Backend_Testing =========
-import { invoke } from "@tauri-apps/api/core";
-import { listen, once } from "@tauri-apps/api/event";
-function test_backend_functions() {
+// import { invoke } from "@tauri-apps/api/core";
+import { once } from "@tauri-apps/api/event";
+// function test_backend_functions() {
 
-  invoke('get_game_list').then((result) => {
-    const obj = JSON.parse(result as string);
-    info("Game list received: " + obj);
-  }).catch((err: string) => {
-    error(err);
-  });
+//   invoke('get_game_list').then((result) => {
+//     const obj = JSON.parse(result as string);
+//     info("Game list received: " + obj);
+//   }).catch((err: string) => {
+//     error(err);
+//   });
 
-  // invoke("get_launcher_version").then((result) => {
-  //   info("Launcher version received: " + result);
-  // });
-}
+//   invoke("get_launcher_version").then((result) => {
+//     info("Launcher version received: " + result);
+//   });
+// }
 
 //~ End of Backend_Testing ==========
 
 // Listen for the app to be initialized
 once("app_initialized", () => {
-  info("App initialized");
-  test_backend_functions();
-
-
-
+  info("[Frontend] App initialized event received.");
+  // test_backend_functions();
 
   ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <React.StrictMode>

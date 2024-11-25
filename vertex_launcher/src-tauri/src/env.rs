@@ -1,4 +1,8 @@
+use std::collections::HashMap;
+use std::sync::Arc;
 use lazy_static::lazy_static;
+use tokio::sync::RwLock;
+use crate::games::Game;
 
 /// # **README : environment variable file** <br><br>
 /// This file is used to store all the constants that are used in the application.
@@ -28,8 +32,16 @@ pub(crate) const ONLINE_CONFIGURATION_FILE: &'static str = "https://www.dropbox.
 
 /// The name of the local store file
 pub(crate) const STORE_FILE_NAME: &'static str = "vertex_store.json";
-/// The key used to store the games list in the store file
-pub(crate) const STORE_GAME_LIST_KEY: &'static str = "games";
+/// The key used to store the games list fetch from ONLINE_CONFIGURATION_FILE in the store file
+pub(crate) const STORE_REMOTE_GAME_LIST_KEY: &'static str = "remote_games";
+
+/// The key used to store the local game list with their.
+pub(crate) const STORE_LOCAL_GAME_LIST_KEY: &'static str = "local_games";
+
+lazy_static! {
+    pub (crate) static ref LOCAL_GAME_LIST: Arc<RwLock<HashMap<u8, Game>>> = Arc::new(RwLock::new(HashMap::<u8, Game>::with_capacity(3)));
+}
+
 
 ///# ====================================
 ///# == Logging configuration
@@ -49,12 +61,12 @@ pub(crate) const STORE_GAME_LIST_KEY: &'static str = "games";
 #[cfg(debug_assertions)]
 pub(crate) const LOG_TARGETS: [tauri_plugin_log::TargetKind; 2] = [
     tauri_plugin_log::TargetKind::Stdout,
-    tauri_plugin_log::TargetKind::Webview
+    tauri_plugin_log::TargetKind::Webview,
 ];
 /// Release profile (default: LogDir)
 #[cfg(not(debug_assertions))]
 pub(crate) const LOG_TARGETS: [tauri_plugin_log::TargetKind; 1] = [
-    tauri_plugin_log::TargetKind::LogDir
+    tauri_plugin_log::TargetKind::LogDir{ file_name: Some(String::from("logs")) },
 ];
 
 ///## Log max size

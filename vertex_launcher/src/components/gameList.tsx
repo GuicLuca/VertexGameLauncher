@@ -1,6 +1,11 @@
-import React, { useState, useEffect } from 'react'
-import { useGame } from './gameContext';
-function gameList({ games }) {
+import { useGame } from './gameContext.tsx';
+import { convertFileSrc } from '@tauri-apps/api/core';
+
+interface GameListProps {
+    games: Game[];
+}
+
+function gameList({ games }: GameListProps) {
 
     const { selectedGame, setSelectedGame } = useGame();
     return (
@@ -17,7 +22,7 @@ function gameList({ games }) {
                         onClick={() => setSelectedGame(game)} // Update the selected game
                     >
                         {/* Logo */}
-                        <img src={game.navigation_icon} alt={`${game.title} logo`} />
+                        <img src={convertFileSrc(game.navigation_icon.local_path)} alt={`${game.title} logo`} />
                         <div>
                             {/* Title */}
                             <h3>{game.title}</h3>

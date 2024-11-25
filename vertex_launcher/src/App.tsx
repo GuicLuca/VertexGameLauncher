@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import reactLogo from "./assets/react.svg";
+import { useEffect, useState } from 'react';
 import { invoke } from "@tauri-apps/api/core";
 import "./App.css";
-import { GameProvider, useGame } from './components/gameContext.jsx';
-import GameList from "./components/gameList.jsx";
-import GamePage from "./components/gamePage.jsx";
+import { GameProvider, useGame } from './components/gameContext.tsx';
+import GameList from "./components/gameList.tsx";
+import GamePage from "./components/gamePage.tsx";
 import { info } from "tauri-plugin-log-api";
+import { forwardConsole } from "./main.tsx"
 
 function App() {
   const [games, setGames] = useState([]);
@@ -16,15 +16,16 @@ function App() {
   //   setGreetMsg(await invoke("greet", { name }));
   // }
   
+forwardConsole('info', info);
+  
   useEffect(() => {
     // Load the local Json
-    fetch('/Games.json')
-      .then((response) => response.json())
-      .then((data) => {
-        setGames(data.games);
-        // Select the first game inside the json by default
-        if (data.games.length > 0) {
-          setSelectedGame(data.games[0]);
+    invoke('get_game_list')
+      .then((response) => {
+        let data = JSON.parse(response as string);
+        setGames(data);
+        if (data.length > 0) {
+          setSelectedGame(data[0]);
         }
       })
       .catch((error) => console.error('Erreur lors du chargement du JSON :', error));

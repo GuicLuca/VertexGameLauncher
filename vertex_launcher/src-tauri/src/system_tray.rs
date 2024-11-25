@@ -50,7 +50,7 @@ pub fn on_tray_menu_event(
     println!("Event tray menu received : {}", event.id.as_ref());
     match event.id.as_ref() {
         "quit" => {
-            quit_app(app.clone());
+            quit_app(&app);
             Ok(())
         }
         "hide" => {
