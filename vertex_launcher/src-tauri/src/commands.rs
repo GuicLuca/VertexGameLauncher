@@ -13,7 +13,7 @@ use crate::download::GameDownload;
 use crate::errors::Verror;
 use crate::env::{LOCAL_GAME_LIST, UPDATE_RATE};
 use crate::{env, errors};
-use crate::errors::Verror::{GameListFetchError, MessageError};
+use crate::errors::Verror::{GameLaunchError, GameListFetchError, MessageError};
 use crate::games::Game;
 
 /// # Commands module
@@ -98,9 +98,7 @@ pub async fn get_game_list() -> Result<String, Verror> {
 /// **Parameters**:<br>
 /// NAME (TYPE)\[SOURCE]: DESCRIPTION
 /// - app_handle (AppHandle)\[tauri-Backend]: The handle to the application used to access the store.<br>
-///
-/// **Returns**:
-/// - String : The list of games in JSON format. e.g. "\[{...}, {...}, ...]"
+/// - game (u8)\[FrontEnd]: The id of the game to download.
 #[tauri::command]
 pub async fn download(app_handle: tauri::AppHandle, game: u8) -> errors::Result<()> {
     info!("Downloading game {}", game);
@@ -204,5 +202,58 @@ pub async fn download(app_handle: tauri::AppHandle, game: u8) -> errors::Result<
     // Use the get game list command to update the frontend ensuring the format is always the same for the frontend
     app_handle.emit(env::EVENT_GAME_LIST_UPDATED, get_game_list().await?)?;
 
+    Ok(())
+}
+
+/// ## Launch a game
+/// **Description**: Launch a game using its executable file.<br>
+/// **Frontend usage**:
+/// ```typescript
+/// invoke('launch', {game: id})
+/// .then(() => {
+///   // game process is terminated
+/// })
+/// .catch((error) => {
+///  console.error(error);
+/// });
+/// ```
+///
+/// **Parameters**:<br>
+/// NAME (TYPE)\[SOURCE]: DESCRIPTION
+/// - app_handle (AppHandle)\[tauri-Backend]: The handle to the application used to access the store.<br>
+/// - game (u8)\[FrontEnd]: The id of the game to launch.
+#[tauri::command]
+pub async fn launch(app_handle: tauri::AppHandle, game: u8) -> errors::Result<()> {
+    // 1 - ensure the game is downloaded and the executable file exists
+    let executable_path = {
+        let game_list = LOCAL_GAME_LIST.read().await;
+        let local_game = game_list.get(&game).ok_or(GameListFetchError(format!("Game with id {} not found", game)))?;
+        let game_path = local_game.game_archive.link.local_path.as_ref().ok_or(GameListFetchError(format!("Game with id {} not found", game)))?;
+        if !game_path.exists() {
+            return Err(GameLaunchError(format!("Executable file for game {} not found", game)));
+        }
+        game_path.to_owned()
+    };
+    
+    // 2 - Launch the game
+    match std::process::Command::new(executable_path).spawn() {
+        Err(e) => return Err(GameLaunchError(format!("Failed to launch game {}: {}", game, e.to_string()))),
+        Ok(mut child) => {
+            info!("Game {} launched", game);
+            // wait for the game to finish
+            match child.wait() {
+                Ok(status) => {
+                    info!("Game {} terminated with status: {}", game, status);
+                    
+                    // Broadcast the game termination
+                    app_handle.emit(&format!("{}_{}", env::EVENT_GAME_PROCESS_TERMINATED, game), status.code())?;
+                }
+                Err(e) => {
+                    return Err(GameLaunchError(format!("Failed to wait for game {} to finish: {}", game, e.to_string())));
+                }
+            }
+        }
+    }
+    
     Ok(())
 }

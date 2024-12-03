@@ -19,7 +19,7 @@ function download() {
     const handleClick = async () => {
         if (isDownloaded) {
             // start the game
-            info('Starting the game');
+            invoke("launch", { game: selectedGame.id })
         } else {
             // download the game
             invoke("download", { game: selectedGame.id}

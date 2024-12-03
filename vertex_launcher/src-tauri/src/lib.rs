@@ -81,6 +81,7 @@ pub fn run() {
             commands::get_launcher_version,
             commands::get_game_list,
             commands::download,
+            commands::launch
         ]);
     
     ///### Application building

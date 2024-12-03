@@ -135,3 +135,6 @@ pub(crate) const EVENT_DOWNLOAD_PROGRESS: &'static str = "download_progress";
 
 /// The event name used to share the new game list with the frontend
 pub(crate) const EVENT_GAME_LIST_UPDATED: &'static str = "game_list_updated";
+
+/// The event name used to broadcast the game process is terminated
+pub(crate) const EVENT_GAME_PROCESS_TERMINATED: &'static str = "game_process_terminated";
