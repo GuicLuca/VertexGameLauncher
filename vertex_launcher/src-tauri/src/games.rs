@@ -9,7 +9,7 @@ use tauri::{AppHandle, Manager};
 use tauri_plugin_http::reqwest;
 use crate::errors;
 use crate::errors::Verror::{GameResourceDownloadError, Io, MessageError};
-use crate::games::LinkType::{BackgroundImage, DownloadLink, NavigationIcon};
+use crate::games::LinkType::{BackgroundImage, GameArchiveLink, NavigationIcon};
 
 /// A struct that represents a link to a resource. It will contain all the information needed to 
 /// download the resource and save it to the app's data directory.<br>
@@ -59,11 +59,48 @@ impl Link {
     }
 }
 
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct GameArchive {
+    pub link: Link,
+    pub need_extract: bool,
+    pub strip_top_level_folder: bool,
+    pub path_to_executable: String,
+    pub need_update: bool,
+}
+
+impl GameArchive {
+    pub fn new(link: Link, need_extract: bool, strip_top_level_folder: bool, path_to_executable: String) -> GameArchive {
+        GameArchive {
+            link,
+            need_extract,
+            strip_top_level_folder,
+            path_to_executable,
+            need_update: false,
+        }
+    }
+
+    pub fn from_json_object(json_map: &Map<String, Value>) -> errors::Result<GameArchive> {
+        let url = Link::from_json_object(json_map["link"].as_object().unwrap())?;
+        let need_extract = json_map["need_extract"].as_bool().unwrap();
+        let strip_top_level_folder = json_map["strip_top_level_folder"].as_bool().unwrap();
+        let path_to_executable = json_map["path_to_executable"].as_str().unwrap().to_string();
+
+        Ok(GameArchive::new(url, need_extract, strip_top_level_folder, path_to_executable))
+    }
+
+    fn is_json_valid(json: &Value) -> bool {
+            json.get("link").is_some() && json["link"].is_object() && Link::is_json_valid(&json["link"]) &&
+            json.get("need_extract").is_some() && json["need_extract"].is_boolean() &&
+            json.get("strip_top_level_folder").is_some() && json["strip_top_level_folder"].is_boolean() &&
+            json.get("path_to_executable").is_some() && json["path_to_executable"].is_string()
+    }
+}
+
 #[allow(dead_code)]
 pub enum LinkType {
     BackgroundImage,
     NavigationIcon,
-    DownloadLink,
+    GameArchiveLink,
 }
 
 /// A struct that represents a game. It contains all the information needed to display the game in the launcher.
@@ -76,7 +113,7 @@ pub struct Game {
     pub description: String,
     pub background_image: Link,
     pub navigation_icon: Link,
-    pub download_link: Link,
+    pub game_archive: GameArchive,
     pub version: String,
     pub platform: Vec<String>,
     pub tags: Vec<String>,
@@ -84,9 +121,10 @@ pub struct Game {
 
 impl Game {
     fn new(id: u8, title: String, subtitle: String, description: String, background_image: Link,
-        navigation_icon: Link, download_link: Link, version: String, platform: Vec<String>, tags: Vec<String>,
+        navigation_icon: Link, game_archive: GameArchive, version: String, platform: Vec<String>, tags: Vec<String>,
     ) -> Game {
-        Game { id, title, subtitle, description, background_image, navigation_icon, download_link,
+        Game { id, title, subtitle, description, background_image, navigation_icon,
+            game_archive,
             version, platform, tags,
         }
     }
@@ -110,9 +148,9 @@ impl Game {
         let tags = json["tags"].as_array().unwrap().iter().map(|x| x.as_str().unwrap().to_string()).collect();
         let background_image_link = Link::from_json_object(json["background_image"].as_object().unwrap())?;
         let navigation_icon_link = Link::from_json_object(json["navigation_icon"].as_object().unwrap())?;
-        let download_link = Link::from_json_object(json["download_link"].as_object().unwrap())?;
+        let game_archive = GameArchive::from_json_object(json["download_link"].as_object().unwrap())?;
         
-        Ok(Game::new(id, title, subtitle, description, background_image_link, navigation_icon_link, download_link, version, platform, tags))
+        Ok(Game::new(id, title, subtitle, description, background_image_link, navigation_icon_link, game_archive, version, platform, tags))
     }
 
     /// Check if the json object is valid for a game struct.
@@ -130,7 +168,7 @@ impl Game {
             (json.get("tags").is_some() || json["tags"] == Value::Null) && json["tags"].is_array() &&
             json.get("background_image").is_some() && json["background_image"].is_object() && Link::is_json_valid(&json["background_image"]) &&
             json.get("navigation_icon").is_some() && json["navigation_icon"].is_object() && Link::is_json_valid(&json["navigation_icon"]) &&
-            json.get("download_link").is_some() && json["download_link"].is_object() && Link::is_json_valid(&json["download_link"])
+            json.get("download_link").is_some() && json["download_link"].is_object() && GameArchive::is_json_valid(&json["download_link"])
     }
     
     /// Compare the local game with the remote game and perform the necessary actions to update the local game.
@@ -172,7 +210,9 @@ impl Game {
             local_game.download_link(app, NavigationIcon).await?;
         }
         // Don't download the download link because we want to let the user choose whether to download the game or not.
-        update_link(&mut local_game.download_link, &remote_game.download_link);
+        // Only say that the download link needs to be updated if the revision is different.
+        local_game.game_archive.need_update = update_link(&mut local_game.game_archive.link, &remote_game.game_archive.link);
+        
         
         Ok(())
     }
@@ -186,7 +226,7 @@ impl Game {
         let link = match link_type {
             BackgroundImage => &mut self.background_image,
             NavigationIcon => &mut self.navigation_icon,
-            DownloadLink => &mut self.download_link,
+            GameArchiveLink => &mut self.game_archive.link,
         };
         
         match reqwest::get(&link.url).await {
@@ -200,7 +240,7 @@ impl Game {
                 fs::create_dir_all(&game_data_folder)?;
                 match File::create(&file_path) {
                     Ok(mut file) => {
-                        let content = response.bytes().await.unwrap();
+                        let content = response.bytes().await?;
 
                         if let Err(e) = file.write_all(&content) {
                             return Err(Io(e));

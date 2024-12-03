@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
+import { once } from "@tauri-apps/api/event";
 
 // ========= Logging config =========
 
@@ -34,7 +35,7 @@ forwardConsole('error', error);
 
 // ========= Backend_Testing =========
 // import { invoke } from "@tauri-apps/api/core";
-import { once } from "@tauri-apps/api/event";
+
 // function test_backend_functions() {
 
 //   invoke('get_game_list').then((result) => {

@@ -8,8 +8,9 @@ function download() {
     let isDownloaded = false;
 
     const checkDownloadStatus = () => {
-        isDownloaded = selectedGame.download_link.local_path !== null;
+        isDownloaded = selectedGame.game_archive.link.local_path !== null;
     };
+
     checkDownloadStatus();
 
     const label = isDownloaded ? 'Start' : 'Download';
@@ -21,15 +22,7 @@ function download() {
             info('Starting the game');
         } else {
             // download the game
-            invoke("download", {
-                 game: selectedGame.id 
-                }
-            ).then(
-                (rep) => {
-                    // download completed
-                    info('Download completed');
-                    //update the game list
-                }
+            invoke("download", { game: selectedGame.id}
             ).catch(
                 (error) => {
                     console.error('Error during download :', error);

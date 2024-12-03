@@ -38,10 +38,11 @@ pub(crate) const STORE_REMOTE_GAME_LIST_KEY: &'static str = "remote_games";
 /// The key used to store the local game list with their.
 pub(crate) const STORE_LOCAL_GAME_LIST_KEY: &'static str = "local_games";
 
+/// List of games stored in the local store in the STORE_LOCAL_GAME_LIST_KEY.<br>
+/// You change the default capacity of the HashMap if you have more games to store.
 lazy_static! {
     pub (crate) static ref LOCAL_GAME_LIST: Arc<RwLock<HashMap<u8, Game>>> = Arc::new(RwLock::new(HashMap::<u8, Game>::with_capacity(3)));
 }
-
 
 ///# ====================================
 ///# == Logging configuration
@@ -114,3 +115,23 @@ lazy_static! {
 /// - UseUtc: Use the UTC timezone
 /// - UseLocal: Use the local machine timezone
 pub(crate) const LOG_TIMEZONE: tauri_plugin_log::TimezoneStrategy = tauri_plugin_log::TimezoneStrategy::UseLocal;
+
+///# ====================================
+///# == Game download configuration
+///# ==================================== 
+
+pub(crate) const UPDATE_RATE: u64 = 1000; // 1000ms
+
+///# ====================================
+///# == Event configuration
+///# ====================================
+/// **Warning**: When updating the event names, you must also update the event names in the frontend !
+
+/// The event name used to broadcast the initialization of the launcher on startup
+pub(crate) const EVENT_INIT: &'static str = "app_initialized";
+
+/// The event name used to broadcast the game download progress
+pub(crate) const EVENT_DOWNLOAD_PROGRESS: &'static str = "download_progress";
+
+/// The event name used to share the new game list with the frontend
+pub(crate) const EVENT_GAME_LIST_UPDATED: &'static str = "game_list_updated";

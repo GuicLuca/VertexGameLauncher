@@ -1,14 +1,18 @@
 use std::fs;
-use std::fs::File;
-use std::io::Write;
+use std::io::{Cursor};
+use std::path::PathBuf;
 use std::time::Instant;
-use tauri::{AppHandle, Manager};
+use tauri::{Emitter, Manager};
 use tauri_plugin_http::reqwest::Client;
 use tauri_plugin_http::reqwest::header::ACCEPT;
 use futures_util::stream::StreamExt;
+use log::info;
+use tauri_plugin_store::StoreExt;
+use crate::download::DownloadSteps::Downloading;
+use crate::download::GameDownload;
 use crate::errors::Verror;
-use crate::env::LOCAL_GAME_LIST;
-use crate::errors;
+use crate::env::{LOCAL_GAME_LIST, UPDATE_RATE};
+use crate::{env, errors};
 use crate::errors::Verror::{GameListFetchError, MessageError};
 use crate::games::Game;
 
@@ -98,7 +102,10 @@ pub async fn get_game_list() -> Result<String, Verror> {
 /// **Returns**:
 /// - String : The list of games in JSON format. e.g. "\[{...}, {...}, ...]"
 #[tauri::command]
-pub async fn download(app_handle: AppHandle, game: u8) -> errors::Result<()> {
+pub async fn download(app_handle: tauri::AppHandle, game: u8) -> errors::Result<()> {
+    info!("Downloading game {}", game);
+    let mut download = GameDownload::new(game, app_handle.clone());
+    
     // 1- Get the game from the local game list
     let local_game = {
         let game_list = LOCAL_GAME_LIST.read().await;
@@ -107,45 +114,95 @@ pub async fn download(app_handle: AppHandle, game: u8) -> errors::Result<()> {
 
     // 2- create the folder to store the downloaded file
     let game_data_folder = app_handle.path().app_data_dir()?.join(local_game.get_folder_name());
-    let zip_path = game_data_folder.join(&local_game.download_link.name);
+    let archive_path = game_data_folder.join(&local_game.game_archive.link.name);
     fs::create_dir_all(&game_data_folder)?;
     
+    
+    // 3- Download the zip file
     let start_time = Instant::now();
     let client = Client::new();
     let response = client
-        .get(&local_game.download_link.url)
+        .get(&local_game.game_archive.link.url)
         .header(ACCEPT, "application/octet-stream")
         .send()
         .await?;
     
     let total_size = response
         .content_length().ok_or(MessageError("Failed to get the content length".to_string()))?;
+    
+    download.set_file_size(total_size);
+    download.set_start_time(start_time);
+    download.set_steps(Downloading);
+    
+    let mut last_update = Instant::now() - std::time::Duration::from_millis(UPDATE_RATE);
 
-    let mut file = File::create(&zip_path)?;
+    let mut bytes: Vec<u8> = Vec::with_capacity(total_size as usize);
     let mut downloaded: u64 = 0;
     let mut stream = response.bytes_stream();
+    
     while let Some(stream_item) = stream.next().await {
         let chunk = stream_item.or(Err(MessageError(format!("Failed to get a chunk for game {}", &local_game.title))))?;
-        file.write(&chunk)?;
         
         downloaded = std::cmp::min(downloaded + (chunk.len() as u64), total_size);
         
-        let duration = start_time.elapsed().as_secs_f64();
-        let speed = if duration > 0.0 {
-            Some(downloaded as f64 / duration / 1024.0 / 1024.0)
-        } else {
-            None
-        };
+        bytes.append(&mut chunk.to_vec());
+
+        download.update(downloaded, None);
         
-        println!("downloaded => {}", downloaded);
-        println!("total_size => {}", total_size);
-        println!("speed => {:?}", speed);
+        if ((last_update.elapsed().as_millis() as u64) >= UPDATE_RATE) == false {
+            // don't advertise the download progress too often
+            continue;
+        }
+        // Advertise the download progress
+        download.advertise();
+        info!("Download progress: {}", download.get_state());
+
+        last_update = Instant::now();
+    }
+    // download completed
+    info!("Download completed in {:.2} seconds", start_time.elapsed().as_secs_f64());
+    
+    
+    // 4 - Extract the zip file to the game folder
+    if local_game.game_archive.need_extract == true {
+        download.set_steps(crate::download::DownloadSteps::Extracting);
+        
+        zip_extract::extract(Cursor::new(bytes), &game_data_folder, local_game.game_archive.strip_top_level_folder)?;
+
+        // Update the local game list with the downloaded file path
+        let mut game_list = LOCAL_GAME_LIST.write().await;
+        let update_local_game = game_list.get_mut(&game).ok_or(GameListFetchError(format!("Game with id {} not found", game)))?;
+        update_local_game.game_archive.link.local_path = Some(
+            game_data_folder.join(
+                PathBuf::from(&local_game.game_archive.path_to_executable).as_os_str()
+            )
+        );
+
+        // 6 - Delete the zip file
+        info!("Cleaning downloaded files");
+        download.set_steps(crate::download::DownloadSteps::Cleaning);
+    }else 
+    {
+        let mut game_list = LOCAL_GAME_LIST.write().await;
+        let update_local_game = game_list.get_mut(&game).ok_or(GameListFetchError(format!("Game with id {} not found", game)))?;
+        update_local_game.game_archive.link.local_path = Some(
+            archive_path.join(
+                PathBuf::from(&local_game.game_archive.path_to_executable).as_os_str()
+            )
+        );
     }
     
-    // download completed
-    let mut game_list = LOCAL_GAME_LIST.write().await;
-    let update_local_game = game_list.get_mut(&game).ok_or(GameListFetchError(format!("Game with id {} not found", game)))?;
-    update_local_game.download_link.local_path = Some(zip_path);
+    // 7 - Update the local game list and give it to the frontend
+    {
+        let store = match app_handle.store(env::STORE_FILE_NAME) {
+            Ok(store) => store,
+            Err(e) => return Err(errors::Verror::StoreAccessError(e.to_string())),
+        };
+        let game_list = LOCAL_GAME_LIST.read().await;
+        store.set(env::STORE_LOCAL_GAME_LIST_KEY, serde_json::to_value(&*game_list).unwrap());
+    }
+    // Use the get game list command to update the frontend ensuring the format is always the same for the frontend
+    app_handle.emit(env::EVENT_GAME_LIST_UPDATED, get_game_list().await?)?;
 
     Ok(())
 }

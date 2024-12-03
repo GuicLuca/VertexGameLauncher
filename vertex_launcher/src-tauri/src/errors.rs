@@ -7,6 +7,9 @@ pub enum Verror {
     Io(#[from] std::io::Error),
     
     #[error(transparent)]
+    ZipError(#[from] zip_extract::ZipExtractError),
+    
+    #[error(transparent)]
     TauriError(#[from] tauri::Error),
     
     #[error(transparent)]

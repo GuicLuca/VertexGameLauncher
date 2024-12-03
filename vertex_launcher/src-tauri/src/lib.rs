@@ -17,6 +17,7 @@ mod env;
 mod errors;
 mod system_tray;
 mod games;
+mod download;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -128,7 +129,7 @@ fn frontend_event_handler(
 fn application_setup(app: &mut App) -> errors::Result<()>
 {
     // Allow the app to access the app directory only
-    app.fs_scope().allow_directory(app.handle().path().app_data_dir()?, true);
+    app.fs_scope().allow_directory(app.handle().path().app_data_dir()?, true)?;
 
     // Set up the system tray
     match system_tray::setup_system_tray(app) {
@@ -341,12 +342,20 @@ fn application_setup(app: &mut App) -> errors::Result<()>
         /// Then close the splashscreen and show the main window.
         info!("[+] Done initializing.");
         // Emit the app_initialized event
-        match app_handle.emit("app_initialized", ()) {
+        match app_handle.emit(env::EVENT_INIT, ()) {
             Ok(_) => {}
             Err(e) => {
                 error!("Error emitting app_initialized event: {:?}", e);
             }
         };
+        
+        // TEMP: download the first game to test the download progress
+        // match commands::download(app_handle.clone(), 1).await {
+        //     Ok(_) => {}
+        //     Err(e) => {
+        //         error!("Error downloading game: {:?}", e);
+        //     }
+        // }
         
 
         // After it's done, close the splashscreen and display the main window
