@@ -1,23 +1,23 @@
 #![allow(unused_doc_comments)]
 
+use crate::env::LOCAL_GAME_LIST;
+use crate::games::Game;
+use log::{error, info};
+use serde_json::json;
 use std::collections::HashMap;
 use std::sync::Arc;
-use log::{error, info};
-use serde_json::{json};
 use tauri::{App, AppHandle, Builder, Emitter, Manager, RunEvent, Window, WindowEvent, Wry};
 use tauri_plugin_fs::FsExt;
 use tauri_plugin_http::reqwest;
-use tauri_plugin_log::{Target};
+use tauri_plugin_log::Target;
 use tauri_plugin_store::{JsonValue, Store, StoreExt};
-use crate::env::LOCAL_GAME_LIST;
-use crate::games::Game;
 
 mod commands;
+mod download;
 mod env;
 mod errors;
-mod system_tray;
 mod games;
-mod download;
+mod system_tray;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -25,70 +25,68 @@ pub fn run() {
 
     ///### Plugins configuration
     /// For special configurations options, prefer using the env module
-    let tauri_builder = tauri_builder.plugin(tauri_plugin_shell::init())
+    let tauri_builder = tauri_builder
+        .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_log::Builder::new().build())
         .plugin(tauri_plugin_store::Builder::new().build())
         .plugin(tauri_plugin_http::init())
         .plugin(tauri_plugin_fs::init())
-        .plugin(tauri_plugin_log::Builder::default()
-            .targets(
-                env::LOG_TARGETS
-                    .into_iter()
-                    .map(Target::new)
-                    .collect::<Vec<Target>>()
-            )
-            .max_file_size(env::LOG_MAX_SIZE)
-            .rotation_strategy(env::LOG_ROTATION_STRATEGY)
-            .level(env::LOG_LEVEL)
-            .level_for("reqwest", log::LevelFilter::Warn)
-            .with_colors(*env::LOG_COLORS)
-            .timezone_strategy(env::LOG_TIMEZONE)
-            .build()
+        .plugin(
+            tauri_plugin_log::Builder::default()
+                .targets(
+                    env::LOG_TARGETS
+                        .into_iter()
+                        .map(Target::new)
+                        .collect::<Vec<Target>>(),
+                )
+                .max_file_size(env::LOG_MAX_SIZE)
+                .rotation_strategy(env::LOG_ROTATION_STRATEGY)
+                .level(env::LOG_LEVEL)
+                .level_for("reqwest", log::LevelFilter::Warn)
+                .with_colors(*env::LOG_COLORS)
+                .timezone_strategy(env::LOG_TIMEZONE)
+                .build(),
         );
-    
+
     ///### Application setup
     /// The setup function performe initialization tasks on startup such as:
     /// - Setting up the system tray
     /// - Fetching the remote games list from `ONLINE_CONFIGURATION_FILE` URL.
     /// - Saving the games list to the store
-    let tauri_builder = tauri_builder.setup(|app| {
-        match application_setup(app) {
-            Ok(_) => {
-                Ok(())
-            },
-            Err(error) => {
-                Err(error.into())
-            },
-        }
+    let tauri_builder = tauri_builder.setup(|app| match application_setup(app) {
+        Ok(_) => Ok(()),
+        Err(error) => Err(error.into()),
     });
-    
+
     ///### Fronted events bindings
     /// Handle frontend events such as window close requests.<br>
     /// See the **`Application Runing`** section for backend events.
-    let tauri_builder = tauri_builder.on_window_event(
-        |window, event| match frontend_event_handler(window, event) {
-            Ok(_) => (),
-            Err(e) => eprintln!("Error handling window event: {:?}", e),
-        },
-    );
-    
+    let tauri_builder =
+        tauri_builder.on_window_event(|window, event| {
+            match frontend_event_handler(window, event) {
+                Ok(_) => (),
+                Err(e) => eprintln!("Error handling window event: {:?}", e),
+            }
+        });
+
     ///### Tauri commands registration
     /// Register the commands that can be called from the frontend.
     /// - **Warning**: always specify the crate of the command to prevent conflicts. (The frontend will ignore the prefix and will only use the function name)<br>
     /// - **See** the commands module to see the list of available commands.<br>
     let tauri_builder = tauri_builder.invoke_handler(tauri::generate_handler![
-            commands::greet,
-            commands::get_launcher_version,
-            commands::get_game_list,
-            commands::download,
-            commands::launch
-        ]);
-    
+        commands::greet,
+        commands::get_launcher_version,
+        commands::get_game_list,
+        commands::download,
+        commands::launch
+    ]);
+
     ///### Application building
     /// see https://v2.tauri.app documentation for basics app behaviour.
-    let tauri_builder = tauri_builder.build(tauri::generate_context!())
+    let tauri_builder = tauri_builder
+        .build(tauri::generate_context!())
         .expect("error while running tauri application");
-    
+
     ///### Application running
     /// Add bindings on backend events.
     tauri_builder.run(|app, event| {
@@ -109,10 +107,7 @@ fn backend_event_handler(_app: &AppHandle, event: RunEvent) {
 }
 
 /// Handle frontend events
-fn frontend_event_handler(
-    window: &Window,
-    event: &WindowEvent,
-) -> errors::Result<()> {
+fn frontend_event_handler(window: &Window, event: &WindowEvent) -> errors::Result<()> {
     match event {
         WindowEvent::CloseRequested { api, .. } => {
             window.hide()?;
@@ -127,10 +122,10 @@ fn frontend_event_handler(
 
 /// Perform the application setup
 /// run on startup
-fn application_setup(app: &mut App) -> errors::Result<()>
-{
+fn application_setup(app: &mut App) -> errors::Result<()> {
     // Allow the app to access the app directory only
-    app.fs_scope().allow_directory(app.handle().path().app_data_dir()?, true)?;
+    app.fs_scope()
+        .allow_directory(app.handle().path().app_data_dir()?, true)?;
 
     // Set up the system tray
     match system_tray::setup_system_tray(app) {
@@ -142,19 +137,17 @@ fn application_setup(app: &mut App) -> errors::Result<()>
         }
     };
 
-
     // Get the splashscreen and main window to show/hide them at the end of the initialization
     let splashscreen_window = app
         .get_webview_window("splashscreen")
         .expect("No window labeled `splashscreen` found.");
 
-    
     let main_window = app
         .get_webview_window("main")
         .expect("No window labeled `main` found.");
-    
+
     let app_handle = app.handle().clone();
-    
+
     /// ## Initialization async task
     /// Perform the initialization code on a new task so the app doesn't freeze. <br>
     /// Add every initialization task that doesn't require access to App here. (Only the app_handle can be moved to the task) <br>
@@ -164,9 +157,9 @@ fn application_setup(app: &mut App) -> errors::Result<()>
         // keep references with all the initialisation function scope here for
         // frequently used variables.
         let store: Arc<Store<Wry>>;
-        
+
         /// ### Initialize the store
-        /// In this step, ensure that all entries in the store are initialized 
+        /// In this step, ensure that all entries in the store are initialized
         /// to avoid dealing with null values in the future.
         /// - If the store fails to open, log the error and close the app.
         {
@@ -174,7 +167,7 @@ fn application_setup(app: &mut App) -> errors::Result<()>
             match app_handle.store(env::STORE_FILE_NAME) {
                 Ok(fetched_store) => {
                     store = fetched_store;
-                    
+
                     if store.get(env::STORE_REMOTE_GAME_LIST_KEY).is_none() {
                         store.set(env::STORE_REMOTE_GAME_LIST_KEY, json!([]));
                     }
@@ -189,20 +182,19 @@ fn application_setup(app: &mut App) -> errors::Result<()>
                     return;
                 }
             };
-            
         }
         // At this point the store variable is initialized and can be used.
 
         /// ### Fetch the remote games list
         /// Fetch the remote games list from the ONLINE_CONFIGURATION_FILE URL
-        /// and save it to the store. 
+        /// and save it to the store.
         /// - Failing should close the app and log the error if there is no local games list.
         {
             info!("- Fetching remote games list...");
             let has_local_game_list = {
                 if let Some(local_game_list) = store.get(env::STORE_LOCAL_GAME_LIST_KEY) {
                     local_game_list.is_array() && !local_game_list.as_array().unwrap().is_empty()
-                }else {
+                } else {
                     // there is no local game list
                     false
                 }
@@ -222,7 +214,7 @@ fn application_setup(app: &mut App) -> errors::Result<()>
 
                     info!("Remote games list fetched successfully.");
                     let response_text = response.text().await.unwrap();
-                    
+
                     info!("Checking remote games list validity...");
                     //TODO: check the validity of the remote games list
 
@@ -250,32 +242,32 @@ fn application_setup(app: &mut App) -> errors::Result<()>
                 }
             }
         }
-        
+
         /// ### Load local games list
         /// Load the local games list from the store and save it to the LOCAL_GAME_LIST global variable.
         {
             info!("- Loading local games list...");
             let store_local_game_list = {
                 match store.get(env::STORE_LOCAL_GAME_LIST_KEY) {
-                    Some(local_game_list) => {
-                        local_game_list
-                    }
+                    Some(local_game_list) => local_game_list,
                     None => {
                         json!([])
                     }
                 }
             };
-            
+
             let mut global_local_game_list = LOCAL_GAME_LIST.write().await;
-            *global_local_game_list = serde_json::from_value::<HashMap<u8, Game>>(store_local_game_list).unwrap_or_else(|e| {
+            *global_local_game_list = serde_json::from_value::<HashMap<u8, Game>>(
+                store_local_game_list,
+            )
+            .unwrap_or_else(|e| {
                 error!("Error loading local games list: {:?}", e);
                 HashMap::new()
             });
-            
+
             info!("Local games list loaded successfully.");
         }
-        
-        
+
         /// ### Download games resources
         /// For each game in the remote games list :
         /// - Add them in the local games list if they are not already there.
@@ -295,14 +287,17 @@ fn application_setup(app: &mut App) -> errors::Result<()>
                     }
                 }
             };
-            
+
             let mut global_local_game_list = LOCAL_GAME_LIST.write().await;
 
             for raw_remote_game in distant_game_list {
                 let remote_game = match Game::initialize_game_from_json(&raw_remote_game) {
-                    Ok(game) => {game}
+                    Ok(game) => game,
                     Err(e) => {
-                        error!("Error creating a game struct with {:?}\nError:\n{:?}", raw_remote_game, e);
+                        error!(
+                            "Error creating a game struct with {:?}\nError:\n{:?}",
+                            raw_remote_game, e
+                        );
                         // Skip the game if it can't be created
                         continue;
                     }
@@ -312,26 +307,40 @@ fn application_setup(app: &mut App) -> errors::Result<()>
                     // The game is already in the local list then only update it
                     let local_game = global_local_game_list.get_mut(&remote_game.id).unwrap();
                     if let Err(e) = Game::update_game(&app_handle, local_game, &remote_game).await {
-                        error!("Error updating game resources of {}: {:?}", remote_game.title, e);
+                        error!(
+                            "Error updating game resources of {}: {:?}",
+                            remote_game.title, e
+                        );
                     };
-                }else {
+                } else {
                     // The game is not in the local list then download resources and add
                     // the game to the local list
                     let mut new_game = remote_game.clone();
-                    if let Err(e) = Game::update_game(&app_handle, &mut new_game, &remote_game).await {
-                        error!("Error updating game resources of {}: {:?}", new_game.title, e);
+                    if let Err(e) =
+                        Game::update_game(&app_handle, &mut new_game, &remote_game).await
+                    {
+                        error!(
+                            "Error updating game resources of {}: {:?}",
+                            new_game.title, e
+                        );
                     }
 
                     global_local_game_list.insert(new_game.id, new_game);
                 }
 
-                info!("Game resources of {} has been downloaded successfully.", remote_game.title);
+                info!(
+                    "Game resources of {} has been downloaded successfully.",
+                    remote_game.title
+                );
             }
-            
+
             // Save the local games list to the store
-            store.set(env::STORE_LOCAL_GAME_LIST_KEY, serde_json::to_value(&*global_local_game_list).unwrap());
+            store.set(
+                env::STORE_LOCAL_GAME_LIST_KEY,
+                serde_json::to_value(&*global_local_game_list).unwrap(),
+            );
         }
-        
+
         /// ### End of initialization
         /// After all the initialization tasks are done, emit the app_initialized event.
         /// Then close the splashscreen and show the main window.
@@ -343,7 +352,7 @@ fn application_setup(app: &mut App) -> errors::Result<()>
                 error!("Error emitting app_initialized event: {:?}", e);
             }
         };
-        
+
         // TEMP: download the first game to test the download progress
         // match commands::download(app_handle.clone(), 1).await {
         //     Ok(_) => {}
@@ -351,14 +360,13 @@ fn application_setup(app: &mut App) -> errors::Result<()>
         //         error!("Error downloading game: {:?}", e);
         //     }
         // }
-        
 
         // After it's done, close the splashscreen and display the main window
         let _ = splashscreen_window.close();
         let _ = main_window.show();
         let _ = system_tray::update_tray_menu(main_window.app_handle());
     });
-    
+
     Ok(())
 }
 
