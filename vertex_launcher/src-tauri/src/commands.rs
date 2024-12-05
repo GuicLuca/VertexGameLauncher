@@ -147,7 +147,7 @@ pub async fn download(app_handle: tauri::AppHandle, game: u8) -> errors::Result<
 
         download.update(downloaded, None);
         
-        if ((last_update.elapsed().as_millis() as u64) >= UPDATE_RATE) == false {
+        if (last_update.elapsed().as_millis() as u64) < UPDATE_RATE {
             // don't advertise the download progress too often
             continue;
         }
@@ -162,7 +162,7 @@ pub async fn download(app_handle: tauri::AppHandle, game: u8) -> errors::Result<
     
     
     // 4 - Extract the zip file to the game folder
-    if local_game.game_archive.need_extract == true {
+    if local_game.game_archive.need_extract {
         download.set_steps(crate::download::DownloadSteps::Extracting);
         
         zip_extract::extract(Cursor::new(bytes), &game_data_folder, local_game.game_archive.strip_top_level_folder)?;
@@ -237,7 +237,7 @@ pub async fn launch(app_handle: tauri::AppHandle, game: u8) -> errors::Result<()
     
     // 2 - Launch the game
     match std::process::Command::new(executable_path).spawn() {
-        Err(e) => return Err(GameLaunchError(format!("Failed to launch game {}: {}", game, e.to_string()))),
+        Err(e) => return Err(GameLaunchError(format!("Failed to launch game {}: {}", game, e))),
         Ok(mut child) => {
             info!("Game {} launched", game);
             // wait for the game to finish
@@ -249,7 +249,7 @@ pub async fn launch(app_handle: tauri::AppHandle, game: u8) -> errors::Result<()
                     app_handle.emit(&format!("{}_{}", env::EVENT_GAME_PROCESS_TERMINATED, game), status.code())?;
                 }
                 Err(e) => {
-                    return Err(GameLaunchError(format!("Failed to wait for game {} to finish: {}", game, e.to_string())));
+                    return Err(GameLaunchError(format!("Failed to wait for game {} to finish: {}", game, e)));
                 }
             }
         }

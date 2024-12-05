@@ -36,12 +36,7 @@ impl Link {
         let url = json_map["url"].as_str().unwrap().to_string();
         let name = json_map["name"].as_str().unwrap().to_string();
         let revision = json_map["revision"].as_u64().unwrap();
-        let local_path: Option<PathBuf> = match json_map.get("local_path") {
-            Some(value) => {
-                Some(PathBuf::deserialize(value).unwrap())
-            },
-            None => None
-        };
+        let local_path: Option<PathBuf> = json_map.get("local_path").map(|value| PathBuf::deserialize(value).unwrap());
         
         Ok(Link::new(url, name, revision, local_path))
     }
@@ -203,10 +198,10 @@ impl Game {
         };
         
         
-        if update_link(&mut local_game.background_image, &remote_game.background_image) == true {
+        if update_link(&mut local_game.background_image, &remote_game.background_image) {
             local_game.download_link(app, BackgroundImage).await?;
         }
-        if update_link(&mut local_game.navigation_icon, &remote_game.navigation_icon) == true {
+        if update_link(&mut local_game.navigation_icon, &remote_game.navigation_icon) {
             local_game.download_link(app, NavigationIcon).await?;
         }
         // Don't download the download link because we want to let the user choose whether to download the game or not.
@@ -231,7 +226,7 @@ impl Game {
         
         match reqwest::get(&link.url).await {
             Ok(response) => {
-                if response.status().is_success() == false {
+                if !response.status().is_success() {
                     return Err(GameResourceDownloadError(format!("{:?}", response)));
                 }
 

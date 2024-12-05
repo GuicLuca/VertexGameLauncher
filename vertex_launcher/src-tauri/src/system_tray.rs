@@ -26,7 +26,7 @@ pub fn update_tray_menu(app: &AppHandle) -> Result<(), Box<dyn std::error::Error
     // Create menu elements
     let hide_item = MenuItem::with_id(app, "hide", "Hide launcher", true, None::<&str>)?;
     if let Some(window) = app.get_webview_window("main") {
-        if window.is_visible().unwrap() == false {
+        if !window.is_visible().unwrap() {
             hide_item.set_text("Show launcher")?;
         } else {
             hide_item.set_text("Hide launcher")?;
@@ -50,7 +50,7 @@ pub fn on_tray_menu_event(
     println!("Event tray menu received : {}", event.id.as_ref());
     match event.id.as_ref() {
         "quit" => {
-            quit_app(&app);
+            quit_app(app);
             Ok(())
         }
         "hide" => {

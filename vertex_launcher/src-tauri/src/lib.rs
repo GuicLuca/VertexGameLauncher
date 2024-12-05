@@ -34,7 +34,7 @@ pub fn run() {
             .targets(
                 env::LOG_TARGETS
                     .into_iter()
-                    .map(|target| Target::new(target))
+                    .map(Target::new)
                     .collect::<Vec<Target>>()
             )
             .max_file_size(env::LOG_MAX_SIZE)
@@ -91,7 +91,7 @@ pub fn run() {
     
     ///### Application running
     /// Add bindings on backend events.
-    let _tauri_builder = tauri_builder.run(|app, event| {
+    tauri_builder.run(|app, event| {
         backend_event_handler(app, event);
     });
 }
@@ -138,7 +138,7 @@ fn application_setup(app: &mut App) -> errors::Result<()>
             println!("System tray initialized !");
         }
         Err(error) => {
-            println!("Error setting up system tray: {}", error.to_string());
+            println!("Error setting up system tray: {}", error);
         }
     };
 
@@ -175,10 +175,10 @@ fn application_setup(app: &mut App) -> errors::Result<()>
                 Ok(fetched_store) => {
                     store = fetched_store;
                     
-                    if store.get(env::STORE_REMOTE_GAME_LIST_KEY).is_some() == false {
+                    if store.get(env::STORE_REMOTE_GAME_LIST_KEY).is_none() {
                         store.set(env::STORE_REMOTE_GAME_LIST_KEY, json!([]));
                     }
-                    if store.get(env::STORE_LOCAL_GAME_LIST_KEY).is_some() == false {
+                    if store.get(env::STORE_LOCAL_GAME_LIST_KEY).is_none() {
                         store.set(env::STORE_LOCAL_GAME_LIST_KEY, json!([]));
                     }
                     info!("Store has been initialized.");
@@ -201,7 +201,7 @@ fn application_setup(app: &mut App) -> errors::Result<()>
             info!("- Fetching remote games list...");
             let has_local_game_list = {
                 if let Some(local_game_list) = store.get(env::STORE_LOCAL_GAME_LIST_KEY) {
-                    local_game_list.is_array() && local_game_list.as_array().unwrap().len() > 0
+                    local_game_list.is_array() && !local_game_list.as_array().unwrap().is_empty()
                 }else {
                     // there is no local game list
                     false
@@ -211,9 +211,9 @@ fn application_setup(app: &mut App) -> errors::Result<()>
             let result = reqwest::get(env::ONLINE_CONFIGURATION_FILE).await;
             match result {
                 Ok(response) => {
-                    if response.status().is_success() == false {
+                    if !response.status().is_success() {
                         error!("Error fetching remote games list: {:?}", response.status());
-                        if has_local_game_list == false {
+                        if !has_local_game_list {
                             eprintln!("No local games list found and failed to fetch remote games list. Closing app.");
                             quit_app(&app_handle);
                             return;
@@ -231,7 +231,7 @@ fn application_setup(app: &mut App) -> errors::Result<()>
                         env::STORE_REMOTE_GAME_LIST_KEY,
                         serde_json::from_str::<JsonValue>(&response_text).unwrap_or_else(|e| {
                             error!("Error parsing remote games list: {:?}", e);
-                            if has_local_game_list == false {
+                            if !has_local_game_list {
                                 eprintln!("No local games list found and failed to fetch remote games list. Closing app.");
                                 quit_app(&app_handle);
                             }
@@ -243,7 +243,7 @@ fn application_setup(app: &mut App) -> errors::Result<()>
                 }
                 Err(e) => {
                     error!("Error fetching remote games list: {:?}", e);
-                    if has_local_game_list == false {
+                    if !has_local_game_list {
                         eprintln!("No local games list found and failed to fetch remote games list. Closing app.");
                         quit_app(&app_handle);
                     }
@@ -308,24 +308,18 @@ fn application_setup(app: &mut App) -> errors::Result<()>
                     }
                 };
 
-                if global_local_game_list.contains_key(&remote_game.id) == true {
+                if global_local_game_list.contains_key(&remote_game.id) {
                     // The game is already in the local list then only update it
                     let local_game = global_local_game_list.get_mut(&remote_game.id).unwrap();
-                    match Game::update_game(&app_handle, local_game, &remote_game).await {
-                        Err(e) => {
-                            error!("Error updating game resources of {}: {:?}", remote_game.title, e);
-                        }
-                        _ => {}
+                    if let Err(e) = Game::update_game(&app_handle, local_game, &remote_game).await {
+                        error!("Error updating game resources of {}: {:?}", remote_game.title, e);
                     };
                 }else {
                     // The game is not in the local list then download resources and add
                     // the game to the local list
                     let mut new_game = remote_game.clone();
-                    match Game::update_game(&app_handle, &mut new_game, &remote_game).await {
-                        Err(e) => {
-                            error!("Error updating game resources of {}: {:?}", new_game.title, e);
-                        }
-                        _ => {}
+                    if let Err(e) = Game::update_game(&app_handle, &mut new_game, &remote_game).await {
+                        error!("Error updating game resources of {}: {:?}", new_game.title, e);
                     }
 
                     global_local_game_list.insert(new_game.id, new_game);

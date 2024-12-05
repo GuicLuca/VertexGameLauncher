@@ -22,7 +22,7 @@ use crate::games::Game;
 
 /// Online configuration file
 /// The URL of the online configuration file that contains the list of games, and all launchers configurations/meta-data.
-pub(crate) const ONLINE_CONFIGURATION_FILE: &'static str = "https://www.dropbox.com/scl/fi/a9i2fyejxce7ka4gc7a75/Games.json?rlkey=scfhkrbowkubx1e8mtatwr56c&st=aiim0f18&dl=1";
+pub(crate) const ONLINE_CONFIGURATION_FILE: &str = "https://www.dropbox.com/scl/fi/a9i2fyejxce7ka4gc7a75/Games.json?rlkey=scfhkrbowkubx1e8mtatwr56c&st=aiim0f18&dl=1";
 
 
 ///# ====================================
@@ -31,12 +31,12 @@ pub(crate) const ONLINE_CONFIGURATION_FILE: &'static str = "https://www.dropbox.
 /// Store documentation webpage : https://v2.tauri.app/plugin/store
 
 /// The name of the local store file
-pub(crate) const STORE_FILE_NAME: &'static str = "vertex_store.json";
+pub(crate) const STORE_FILE_NAME: &str = "vertex_store.json";
 /// The key used to store the games list fetch from ONLINE_CONFIGURATION_FILE in the store file
-pub(crate) const STORE_REMOTE_GAME_LIST_KEY: &'static str = "remote_games";
+pub(crate) const STORE_REMOTE_GAME_LIST_KEY: &str = "remote_games";
 
 /// The key used to store the local game list with their.
-pub(crate) const STORE_LOCAL_GAME_LIST_KEY: &'static str = "local_games";
+pub(crate) const STORE_LOCAL_GAME_LIST_KEY: &str = "local_games";
 
 /// List of games stored in the local store in the STORE_LOCAL_GAME_LIST_KEY.<br>
 /// You change the default capacity of the HashMap if you have more games to store.
@@ -128,13 +128,13 @@ pub(crate) const UPDATE_RATE: u64 = 1000; // 1000ms
 /// **Warning**: When updating the event names, you must also update the event names in the frontend !
 
 /// The event name used to broadcast the initialization of the launcher on startup
-pub(crate) const EVENT_INIT: &'static str = "app_initialized";
+pub(crate) const EVENT_INIT: &str = "app_initialized";
 
 /// The event name used to broadcast the game download progress
-pub(crate) const EVENT_DOWNLOAD_PROGRESS: &'static str = "download_progress";
+pub(crate) const EVENT_DOWNLOAD_PROGRESS: &str = "download_progress";
 
 /// The event name used to share the new game list with the frontend
-pub(crate) const EVENT_GAME_LIST_UPDATED: &'static str = "game_list_updated";
+pub(crate) const EVENT_GAME_LIST_UPDATED: &str = "game_list_updated";
 
 /// The event name used to broadcast the game process is terminated
-pub(crate) const EVENT_GAME_PROCESS_TERMINATED: &'static str = "game_process_terminated";
+pub(crate) const EVENT_GAME_PROCESS_TERMINATED: &str = "game_process_terminated";
