@@ -92,11 +92,8 @@ impl GameDownload {
         };
         
         // by default show a notification
-        match notifica::notify("Vertex Launcher", &*format!("L'instalation de {} est terminée.", game_name)){
-            Ok(_) => {}
-            Err(e) => {
-                error!("Failed to get game name for notification body. {}", e);
-            }
+        if let Err(e) = notifica::notify("Vertex Launcher", &*format!("L'instalation de {} est terminée.", game_name)){
+            error!("Failed to get game name for notification body. {}", e);
         }
     }
 
