@@ -57,18 +57,7 @@ lazy_static! {
 /// For LogDir and Folder, the logs will be written to a file named `log.txt` in a specified directory. (name can be customized).
 /// @see https://v2.tauri.app/plugin/logging/#persisting-logs for more information.
 
-///Development profile (default: Stdout and Webview)
-#[cfg(debug_assertions)]
-pub(crate) const LOG_TARGETS: [tauri_plugin_log::TargetKind; 2] = [
-    tauri_plugin_log::TargetKind::Stdout,
-    tauri_plugin_log::TargetKind::Webview,
-];
-/// Release profile (default: LogDir)
-#[cfg(not(debug_assertions))]
-pub(crate) const LOG_TARGETS: [tauri_plugin_log::TargetKind; 1] =
-    [tauri_plugin_log::TargetKind::LogDir {
-        file_name: Some(String::from("logs")),
-    }];
+// Due to const issues, see the value of these settings in lib.rs
 
 ///## Log max size
 /// The maximum size of the log file (in bytes) before it triggers a rotation.<br>

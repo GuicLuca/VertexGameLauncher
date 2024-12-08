@@ -1,3 +1,4 @@
+import Game from '../models/game.tsx';
 import { useGame } from './gameContext.tsx';
 import { convertFileSrc } from '@tauri-apps/api/core';
 

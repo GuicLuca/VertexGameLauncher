@@ -33,4 +33,5 @@ tauri-plugin-log = { git = "https://github.com/tauri-apps/plugins-workspace", br
 tauri-plugin-fs = "2"
 futures-util = "0.3.31"
 zip-extract = "0.2.1"
+notifica = "3.0.2"
 

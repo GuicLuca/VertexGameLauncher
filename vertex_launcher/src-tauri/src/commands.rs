@@ -225,6 +225,7 @@ pub async fn download(app_handle: tauri::AppHandle, game: u8) -> errors::Result<
     // Use the get game list command to update the frontend ensuring the format is always the same for the frontend
     app_handle.emit(env::EVENT_GAME_LIST_UPDATED, get_game_list().await?)?;
 
+    download.complete().await;
     Ok(())
 }
 

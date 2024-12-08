@@ -1,4 +1,6 @@
 import { createContext, useContext, useState, ReactNode } from 'react';
+import Game from '../models/game';
+
 
 interface GameContextType {
   selectedGame: Game;
