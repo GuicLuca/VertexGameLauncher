@@ -57,7 +57,7 @@ lazy_static! {
 /// For LogDir and Folder, the logs will be written to a file named `log.txt` in a specified directory. (name can be customized).
 /// @see https://v2.tauri.app/plugin/logging/#persisting-logs for more information.
 
-// Due to const issues, see the value of these settings in lib.rs
+// Due to const/static type initialization issues, see values of these settings in lib.rs in run().
 
 ///## Log max size
 /// The maximum size of the log file (in bytes) before it triggers a rotation.<br>
@@ -72,13 +72,12 @@ pub(crate) const LOG_ROTATION_STRATEGY: tauri_plugin_log::RotationStrategy =
     tauri_plugin_log::RotationStrategy::KeepOne;
 
 ///## Log Level
-/// The maximum level of the logs to display.
-
-/// Development profile (default: Debug)
+/// The maximum level of the logs to display.<br>
+/// Development profile default: Debug<br>
+/// Release profile default: Warn
 #[cfg(debug_assertions)]
 pub(crate) const LOG_LEVEL: log::LevelFilter = log::LevelFilter::Debug;
 
-/// Release profile (default: Warn)
 #[cfg(not(debug_assertions))]
 pub(crate) const LOG_LEVEL: log::LevelFilter = log::LevelFilter::Warn;
 
@@ -110,6 +109,8 @@ pub(crate) const LOG_TIMEZONE: tauri_plugin_log::TimezoneStrategy =
 ///# == Game download configuration
 ///# ====================================
 
+/// The UPDATE_RATE is the period used to advertise to the frontend
+/// the download progression.
 pub(crate) const UPDATE_RATE: u64 = 1000; // 1000ms
 
 ///# ====================================
