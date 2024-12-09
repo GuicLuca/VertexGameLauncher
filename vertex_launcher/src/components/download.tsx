@@ -1,7 +1,7 @@
-import React from 'react';
+// import React from 'react';
 import { invoke } from "@tauri-apps/api/core";
 import { useGame } from './gameContext.tsx';
-import { info } from 'tauri-plugin-log-api';
+// import { info } from 'tauri-plugin-log-api';
 
 function download() {
     const { selectedGame } = useGame();

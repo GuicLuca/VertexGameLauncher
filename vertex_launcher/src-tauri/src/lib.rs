@@ -21,6 +21,23 @@ mod system_tray;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
+    ///Development profile (default: Stdout and Webview)
+    #[cfg(debug_assertions)]
+    let log_targets: [tauri_plugin_log::TargetKind; 2] = [
+        tauri_plugin_log::TargetKind::Stdout,
+        tauri_plugin_log::TargetKind::Webview,
+    ];
+    /// Release profile (default: LogDir)
+    #[cfg(not(debug_assertions))]
+    let log_targets: [tauri_plugin_log::TargetKind; 1] =[
+        tauri_plugin_log::TargetKind::LogDir {
+            file_name: Some("logs".to_string()),
+        }];
+    
+    
+    
+    
+    
     let tauri_builder: Builder<Wry> = tauri::Builder::default();
 
     ///### Plugins configuration
@@ -34,8 +51,7 @@ pub fn run() {
         .plugin(
             tauri_plugin_log::Builder::default()
                 .targets(
-                    env::LOG_TARGETS
-                        .into_iter()
+                    log_targets.into_iter()
                         .map(Target::new)
                         .collect::<Vec<Target>>(),
                 )
