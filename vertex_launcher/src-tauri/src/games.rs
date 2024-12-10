@@ -124,7 +124,7 @@ pub enum LinkType {
 pub struct Game {
     pub id: u8,
     pub title: String,
-    pub subtitle: String,
+    pub subtitle: Option<String>,
     pub description: String,
     pub background_image: Link,
     pub navigation_icon: Link,
@@ -138,7 +138,7 @@ impl Game {
     fn new(
         id: u8,
         title: String,
-        subtitle: String,
+        subtitle: Option<String>,
         description: String,
         background_image: Link,
         navigation_icon: Link,
@@ -173,7 +173,13 @@ impl Game {
 
         let id = json["id"].as_u64().unwrap() as u8;
         let title = json["title"].as_str().unwrap().to_string();
-        let subtitle = json["subtitle"].as_str().unwrap().to_string();
+        let subtitle: Option<String> = {
+            if json["subtitle"] == Value::Null {
+                None
+            } else {
+                Some(json["subtitle"].as_str().unwrap().to_string())
+            }
+        };
         let description = json["description"].as_str().unwrap().to_string();
         let version = json["version"].as_str().unwrap().to_string();
         let platform = json["platform"]
@@ -219,16 +225,12 @@ impl Game {
             && json["id"].is_u64()
             && json.get("title").is_some()
             && json["title"].is_string()
-            && (json.get("subtitle").is_some() || json["subtitle"] == Value::Null)
-            && json["subtitle"].is_string()
-            && (json.get("description").is_some() || json["description"] == Value::Null)
-            && json["description"].is_string()
-            && (json.get("version").is_some() || json["version"] == Value::Null)
-            && json["version"].is_string()
+            && (json["description"] == Value::Null || json["description"].is_string())
+            && (json["subtitle"] == Value::Null || json["subtitle"].is_string())
+            && (json["version"] == Value::Null || json["version"].is_string())
             && json.get("platform").is_some()
             && json["platform"].is_array()
-            && (json.get("tags").is_some() || json["tags"] == Value::Null)
-            && json["tags"].is_array()
+            && (json["tags"] == Value::Null || json["tags"].is_array())
             && json.get("background_image").is_some()
             && json["background_image"].is_object()
             && Link::is_json_valid(&json["background_image"])
