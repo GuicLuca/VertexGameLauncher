@@ -29,6 +29,7 @@ interface Game {
     version: string;
     platform: string[];
     tags: string[];
+    weight: number;
 }
 
 export default Game;

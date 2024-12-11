@@ -132,6 +132,7 @@ pub struct Game {
     pub version: String,
     pub platform: Vec<String>,
     pub tags: Vec<String>,
+    pub weight: u8,
 }
 
 impl Game {
@@ -146,6 +147,7 @@ impl Game {
         version: String,
         platform: Vec<String>,
         tags: Vec<String>,
+        weight: u8,
     ) -> Game {
         Game {
             id,
@@ -158,6 +160,7 @@ impl Game {
             version,
             platform,
             tags,
+            weight
         }
     }
 
@@ -200,6 +203,7 @@ impl Game {
             Link::from_json_object(json["navigation_icon"].as_object().unwrap())?;
         let game_archive =
             GameArchive::from_json_object(json["download_link"].as_object().unwrap())?;
+        let weight: u8 = json["weight"].as_u64().unwrap() as u8;
 
         Ok(Game::new(
             id,
@@ -212,6 +216,7 @@ impl Game {
             version,
             platform,
             tags,
+            weight
         ))
     }
 
@@ -240,6 +245,8 @@ impl Game {
             && json.get("download_link").is_some()
             && json["download_link"].is_object()
             && GameArchive::is_json_valid(&json["download_link"])
+            && json.get("weight").is_some()
+            && json["weight"].is_u64()
     }
 
     /// Compare the local game with the remote game and perform the necessary actions to update the local game.
@@ -254,6 +261,7 @@ impl Game {
         local_game.description = remote_game.description.to_owned();
         local_game.platform = remote_game.platform.to_owned();
         local_game.tags = remote_game.tags.to_owned();
+        local_game.weight = remote_game.weight;
 
         // lambda function to update a link
         // return true if the local link need to be downloaded
