@@ -16,7 +16,7 @@ function gamePage() {
                 <h3>{selectedGame.subtitle}</h3>
             </div>
             <div className='infos-jeu'>
-                <div>
+                <div className='game-descritpion'>
                     {/* game desc */}
                     <h3>Game Description</h3>
                     <p>{selectedGame.description}</p>

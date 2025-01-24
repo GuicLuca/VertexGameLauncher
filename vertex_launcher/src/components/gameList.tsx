@@ -34,9 +34,9 @@ function gameList({ games }: GameListProps) {
                 ))}
             </div>
             {/* Launcher options */}
-            <div className='option btn-strd'>
+            {/* <div className='option btn-strd'>
                 Options
-            </div>
+            </div> */}
         </div>
     )
 }

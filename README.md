@@ -28,7 +28,8 @@ the key `games` which is an array of game object. Here is an example with on gam
 {
     "games": [
         {
-            "id": 1, // nNumeric (UNIQUE): The identifier of the game
+            "id": 1, // Numeric (UNIQUE): The identifier of the game
+            "weight": 100, // Numeric: Used to order games in the list. Higher weight first
             "title": "...", // String: Main title of your game (used in the sidebar)
             "subtitle": "...", // String: Suffix title if needed
             "description": "...", // String: Small description of the game displayed in the game page

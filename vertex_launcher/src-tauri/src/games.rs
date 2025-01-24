@@ -124,7 +124,7 @@ pub enum LinkType {
 pub struct Game {
     pub id: u8,
     pub title: String,
-    pub subtitle: String,
+    pub subtitle: Option<String>,
     pub description: String,
     pub background_image: Link,
     pub navigation_icon: Link,
@@ -132,13 +132,14 @@ pub struct Game {
     pub version: String,
     pub platform: Vec<String>,
     pub tags: Vec<String>,
+    pub weight: u8,
 }
 
 impl Game {
     fn new(
         id: u8,
         title: String,
-        subtitle: String,
+        subtitle: Option<String>,
         description: String,
         background_image: Link,
         navigation_icon: Link,
@@ -146,6 +147,7 @@ impl Game {
         version: String,
         platform: Vec<String>,
         tags: Vec<String>,
+        weight: u8,
     ) -> Game {
         Game {
             id,
@@ -158,6 +160,7 @@ impl Game {
             version,
             platform,
             tags,
+            weight
         }
     }
 
@@ -173,7 +176,13 @@ impl Game {
 
         let id = json["id"].as_u64().unwrap() as u8;
         let title = json["title"].as_str().unwrap().to_string();
-        let subtitle = json["subtitle"].as_str().unwrap().to_string();
+        let subtitle: Option<String> = {
+            if json["subtitle"] == Value::Null {
+                None
+            } else {
+                Some(json["subtitle"].as_str().unwrap().to_string())
+            }
+        };
         let description = json["description"].as_str().unwrap().to_string();
         let version = json["version"].as_str().unwrap().to_string();
         let platform = json["platform"]
@@ -194,6 +203,7 @@ impl Game {
             Link::from_json_object(json["navigation_icon"].as_object().unwrap())?;
         let game_archive =
             GameArchive::from_json_object(json["download_link"].as_object().unwrap())?;
+        let weight: u8 = json["weight"].as_u64().unwrap() as u8;
 
         Ok(Game::new(
             id,
@@ -206,6 +216,7 @@ impl Game {
             version,
             platform,
             tags,
+            weight
         ))
     }
 
@@ -219,16 +230,12 @@ impl Game {
             && json["id"].is_u64()
             && json.get("title").is_some()
             && json["title"].is_string()
-            && (json.get("subtitle").is_some() || json["subtitle"] == Value::Null)
-            && json["subtitle"].is_string()
-            && (json.get("description").is_some() || json["description"] == Value::Null)
-            && json["description"].is_string()
-            && (json.get("version").is_some() || json["version"] == Value::Null)
-            && json["version"].is_string()
+            && (json["description"] == Value::Null || json["description"].is_string())
+            && (json["subtitle"] == Value::Null || json["subtitle"].is_string())
+            && (json["version"] == Value::Null || json["version"].is_string())
             && json.get("platform").is_some()
             && json["platform"].is_array()
-            && (json.get("tags").is_some() || json["tags"] == Value::Null)
-            && json["tags"].is_array()
+            && (json["tags"] == Value::Null || json["tags"].is_array())
             && json.get("background_image").is_some()
             && json["background_image"].is_object()
             && Link::is_json_valid(&json["background_image"])
@@ -238,6 +245,8 @@ impl Game {
             && json.get("download_link").is_some()
             && json["download_link"].is_object()
             && GameArchive::is_json_valid(&json["download_link"])
+            && json.get("weight").is_some()
+            && json["weight"].is_u64()
     }
 
     /// Compare the local game with the remote game and perform the necessary actions to update the local game.
@@ -252,6 +261,7 @@ impl Game {
         local_game.description = remote_game.description.to_owned();
         local_game.platform = remote_game.platform.to_owned();
         local_game.tags = remote_game.tags.to_owned();
+        local_game.weight = remote_game.weight;
 
         // lambda function to update a link
         // return true if the local link need to be downloaded

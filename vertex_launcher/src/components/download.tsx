@@ -28,6 +28,8 @@ function download() {
                     console.error('Error during download :', error);
                 }
             );
+
+            
         }
     }
 
