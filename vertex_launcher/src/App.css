@@ -246,17 +246,17 @@ button {
 .gamePage .infos-jeu {
   position: absolute;
   display: flex;
-  justify-content: space-around;
   top: 50%;
   left: 50%;
   translate: -50% -50%;
-  width: 90%;
+  width: 95%;
 }
+
 .gamePage .infos-jeu div {
   border: 1px solid #B0B0C3;
   max-height: 200px;
   padding: 16px;
-  width: 40%;
+  width: 30%;
   border-radius: 16px;
   background-color: rgba(0, 0, 0, 0.7);
   text-overflow: ellipsis;
