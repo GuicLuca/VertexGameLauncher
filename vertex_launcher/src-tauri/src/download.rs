@@ -95,6 +95,10 @@ impl GameDownload {
         if let Err(e) = notifica::notify("Vertex Launcher", &*format!("L'instalation de {} est terminée.", game_name)){
             error!("Failed to get game name for notification body. {}", e);
         }
+
+        self.app_handle
+            .emit(&format!("{}_{}", env::EVENT_DOWNLOAD_COMPLETED, &self.game_id), &self.game_id)
+            .expect("Failed to broadcast the download completed event");
     }
 
     pub fn get_state(&self) -> Value {

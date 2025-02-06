@@ -124,6 +124,9 @@ pub(crate) const EVENT_INIT: &str = "app_initialized";
 /// The event name used to broadcast the game download progress
 pub(crate) const EVENT_DOWNLOAD_PROGRESS: &str = "download_progress";
 
+/// The event name used to broadcast the game download completed
+pub(crate) const EVENT_DOWNLOAD_COMPLETED: &str = "download_completed";
+
 /// The event name used to share the new game list with the frontend
 pub(crate) const EVENT_GAME_LIST_UPDATED: &str = "game_list_updated";
 

@@ -172,6 +172,9 @@ pub async fn download(app_handle: tauri::AppHandle, game: u8) -> errors::Result<
 
         last_update = Instant::now();
     }
+    // advertise a last time to get the 100% of progress
+    download.advertise();
+
     // download completed
     info!(
         "Download completed in {:.2} seconds",
