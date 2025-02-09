@@ -81,6 +81,8 @@ impl GameDownload {
     }
     
     pub async fn complete(&self){
+        self.set_steps(DownloadSteps::Complete);
+
         let game_name = {
             let game_list = LOCAL_GAME_LIST.read().await;
             game_list
