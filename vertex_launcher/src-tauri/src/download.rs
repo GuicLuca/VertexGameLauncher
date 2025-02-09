@@ -59,6 +59,7 @@ impl GameDownload {
 
     pub fn set_steps(&mut self, steps: DownloadSteps) {
         self.steps = steps;
+        self.advertise();
     }
 
     pub fn set_start_time(&mut self, time_start: std::time::Instant) {
