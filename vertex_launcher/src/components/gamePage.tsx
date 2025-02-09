@@ -7,7 +7,7 @@ function gamePage() {
     const isDownloaded = false;
     if (!selectedGame) return <div>Vous n'avez pas de jeux</div>;
     return (
-        <div className='gamePage'>
+        <div className='infoGame'>
             {/*  background image of the selected game */}
             <img className='background-img' src={convertFileSrc(selectedGame.background_image.local_path)} alt={selectedGame.title} />
             {/* game name */}
@@ -50,10 +50,6 @@ function gamePage() {
                     </div>
                 )}
             </div>
-            {/* <div className='start-btn btn-strd'>
-                {isDownloaded ? <div>Start</div> : <div>Download</div>}
-                <p>V{selectedGame.version}</p>
-            </div> */}
             <Download />
         </div>
     )

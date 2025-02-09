@@ -47,6 +47,7 @@ impl GameDownload {
             file_size: 0,
             downloaded: 0,
             steps: DownloadSteps::Starting,
+            //Concaténation du event download + game id 
             event_name: format!("{}_{}", env::EVENT_DOWNLOAD_PROGRESS, game_id),
             app_handle,
             time_start: None,
@@ -80,7 +81,7 @@ impl GameDownload {
             .expect("Failed to broadcast the download progress");
     }
     
-    pub async fn complete(&self){
+    pub async fn complete(&mut self){
         self.set_steps(DownloadSteps::Complete);
 
         let game_name = {

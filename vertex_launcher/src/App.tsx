@@ -8,6 +8,7 @@ import { info } from "tauri-plugin-log-api";
 import { forwardConsole } from "./main.tsx"
 import { listen } from '@tauri-apps/api/event';
 import Game from "./models/game.tsx";
+import DownloadProgress from "./components/downloadProgress.tsx";
 
 function App() {
   const [games, setGames] = useState([] as Game[]); // Create a state for the game list
@@ -17,6 +18,8 @@ function App() {
   //   // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
   //   setGreetMsg(await invoke("greet", { name }));
   // };
+
+  // Lors d'un '.emit(env::EVENT_GAME_LIST_UPDATED' Mettre a jour la liste + Selectionner le dernier jeu selec
 
   listen("game_list_updated", (event) => {
     console.log(JSON.stringify(event.payload));
@@ -50,7 +53,10 @@ function App() {
   return (
     <div className="launcher App">
       <GameList games={games} /> {/* Give the game list to GameList */}
+      <div className='gamePage'>
       <GamePage />
+      <DownloadProgress gameId={selectedGame?.id ?? 1} />
+      </div>
     </div>
   );
 }

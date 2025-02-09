@@ -1,46 +1,41 @@
-// import React from 'react';
 import { invoke } from "@tauri-apps/api/core";
 import { useGame } from './gameContext.tsx';
-// import { info } from 'tauri-plugin-log-api';
 
-function download() {
-    const { selectedGame } = useGame();
-    let isDownloaded = false;
+function DownloadButton() {
+    const { selectedGame, downloadingGames, setDownloadingGames } = useGame();
 
-    const checkDownloadStatus = () => {
-        isDownloaded = selectedGame.game_archive.link.local_path !== null;
-    };
+    const isDownloaded = selectedGame.game_archive.link.local_path !== null;
+    const isDownloadingNow = downloadingGames.has(selectedGame.id); // Vérifie si le jeu actuel est en cours de téléchargement
 
-    checkDownloadStatus();
-
-    const label = isDownloaded ? 'Start' : 'Download';
-
+    const label = isDownloaded ? "Start" : isDownloadingNow ? "Downloading..." : "Download";
 
     const handleClick = async () => {
         if (isDownloaded) {
-            // start the game
-            invoke("launch", { game: selectedGame.id })
+            invoke("launch", { game: selectedGame.id });
         } else {
-            // download the game
-            invoke("download", { game: selectedGame.id}
-            ).catch(
-                (error) => {
-                    console.error('Error during download :', error);
-                }
-            );
+            // Créer un nouveau Set pour forcer la mise à jour
+            const newDownloadingGames = new Set(downloadingGames);
+            newDownloadingGames.add(selectedGame.id);
+            setDownloadingGames(newDownloadingGames);
 
-            
+            invoke("download", { game: selectedGame.id })
+                .catch((error) => {
+                    console.error('Error during download:', error);
+                });
         }
-    }
+    };
 
     return (
-        <div className='start-btn btn-strd'
-            onClick={() => handleClick()}
+        <button
+            className={`start-btn btn-strd ${isDownloadingNow ? "disabled" : ""}`}
+            onClick={handleClick}
+            disabled={isDownloadingNow} // Désactive le bouton si le jeu actuel est en cours de téléchargement
+            style={{ opacity: isDownloadingNow ? 0.5 : 1, pointerEvents: isDownloadingNow ? "none" : "auto" }}
         >
-                <div>{label}</div>
-                <p>V{selectedGame.version}</p>
-            </div>
-      )
+            <div>{label}</div>
+            <p>V{selectedGame.version}</p>
+        </button>
+    );
 }
 
-export default download
+export default DownloadButton;

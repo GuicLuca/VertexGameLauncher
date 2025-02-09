@@ -211,6 +211,12 @@ button {
 }
 
 .gamePage {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.gamePage .infoGame {
+  height: 100%;
   position: relative;
   overflow: hidden;
   color: #E0E0E6;
@@ -218,7 +224,7 @@ button {
   background-color: rgba(0, 0, 0, 0.4);
   color: #E0E0E6;
 }
-.gamePage .background-img {
+.gamePage .infoGame .background-img {
   z-index: -10;
   position: absolute;
   top: 0;
@@ -227,44 +233,40 @@ button {
   -o-object-fit: cover;
      object-fit: cover;
 }
-.gamePage .title {
+.gamePage .infoGame .title {
   -webkit-backdrop-filter: blur(4px);
           backdrop-filter: blur(4px);
   padding: 16px 0;
 }
-.gamePage .title h1 {
+.gamePage .infoGame .title h1 {
   text-shadow: 1px 1px 7px rgba(255, 255, 255, 0.41);
   font-size: 3.2em;
   margin: 0;
   line-height: 1;
 }
-.gamePage .title h1 + h3 {
+.gamePage .infoGame .title h1 + h3 {
   text-align: center;
   margin: 0;
   font-weight: 300;
 }
-.gamePage .infos-jeu {
-  position: absolute;
+.gamePage .infoGame .infos-jeu {
   display: flex;
-  top: 50%;
-  left: 50%;
-  translate: -50% -50%;
-  width: 95%;
+  margin: 2%;
+  width: 90%;
 }
-
-.gamePage .infos-jeu div {
+.gamePage .infoGame .infos-jeu div {
   border: 1px solid #B0B0C3;
   max-height: 200px;
   padding: 16px;
-  width: 30%;
+  width: 40%;
   border-radius: 16px;
   background-color: rgba(0, 0, 0, 0.7);
   text-overflow: ellipsis;
 }
-.gamePage .infos-jeu div h3 {
+.gamePage .infoGame .infos-jeu div h3 {
   margin-top: 0;
 }
-.gamePage .infos-jeu div p {
+.gamePage .infoGame .infos-jeu div p {
   max-height: 170px;
   overflow-y: auto;
   scrollbar-color: #2F2F45 rgba(0, 0, 0, 0);
@@ -273,7 +275,7 @@ button {
   text-overflow: ellipsis;
   margin: 0;
 }
-.gamePage .game-feat {
+.gamePage .infoGame .game-feat {
   position: absolute;
   bottom: 16px;
   left: 16px;
@@ -282,34 +284,67 @@ button {
   padding: 0 8px;
   border-radius: 16px;
 }
-.gamePage .game-feat > div {
+.gamePage .infoGame .game-feat > div {
   padding: 4px 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
-.gamePage .game-feat > div h3 {
+.gamePage .infoGame .game-feat > div h3 {
   margin: 4px 0;
 }
-.gamePage .game-feat > div div {
+.gamePage .infoGame .game-feat > div div {
   display: flex;
   flex-wrap: wrap;
 }
-.gamePage .game-feat > div div p {
+.gamePage .infoGame .game-feat > div div p {
   margin: 0;
   margin-right: 32px;
   white-space: nowrap;
 }
-.gamePage .start-btn {
+.gamePage .infoGame .start-btn {
   position: absolute;
   bottom: 16px;
   right: 16px;
 }
-.gamePage .start-btn p {
+.gamePage .infoGame .start-btn p {
   margin: 0;
   font-size: 0.4em;
   position: absolute;
   bottom: 0;
   left: 50%;
   translate: -50%;
+}
+.gamePage .download-progress {
+  display: flex;
+  position: relative;
+  text-align: left;
+  font-family: Arial, sans-serif;
+}
+.gamePage .download-progress h3 {
+  margin: auto 32px;
+}
+.gamePage .download-progress .progress-bar-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: -10;
+  background-color: #2A2A40;
+  overflow: hidden;
+}
+.gamePage .download-progress .progress-bar-container .progress-bar {
+  transition: width 0.3s ease;
+  height: 100%;
+}
+.gamePage .download-progress .download-info {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+.gamePage .download-progress .download-info p {
+  margin: 0.5rem 8px;
+}
+.gamePage .download-progress .download-info strong {
+  color: white;
 }/*# sourceMappingURL=App.css.map */

@@ -191,7 +191,7 @@ pub async fn download(app_handle: tauri::AppHandle, game: u8) -> errors::Result<
             local_game.game_archive.strip_top_level_folder,
         )?;
 
-        // Update the local game list with the downloaded file path
+        // 5 - Update the local game list with the downloaded file path
         let mut game_list = LOCAL_GAME_LIST.write().await;
         let update_local_game = game_list.get_mut(&game).ok_or(GameListFetchError(format!(
             "Game with id {} not found",
