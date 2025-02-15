@@ -20,7 +20,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 
     downloadingGames.forEach((gameId) => {
       const eventName = `download_completed_${gameId}`;
-      const unlisten = listen(eventName, (event) => {
+      const unlisten = listen(eventName, (_event) => {
         setSelectedGame(mySelectedGame)
         setDownloadingGames(prevDownloadingGames => {
           const newDownloadingGames = new Set(prevDownloadingGames);
@@ -35,7 +35,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     return () => {
       unlistenCallbacks.forEach(unlistenPromise => unlistenPromise.then(fn => fn()));
     };
-  }, [downloadingGames]); // On relance l'effet à chaque changement de `downloadingGames`
+  }, [downloadingGames]); //trigger the effect each time `downloadingGames` changes
   return (
     <GameContext.Provider value={{ selectedGame, setSelectedGame, downloadingGames, setDownloadingGames }}>
       {children}

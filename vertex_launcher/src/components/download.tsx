@@ -5,7 +5,7 @@ function DownloadButton() {
     const { selectedGame, downloadingGames, setDownloadingGames } = useGame();
 
     const isDownloaded = selectedGame.game_archive.link.local_path !== null;
-    const isDownloadingNow = downloadingGames.has(selectedGame.id); // Vérifie si le jeu actuel est en cours de téléchargement
+    const isDownloadingNow = downloadingGames.has(selectedGame.id); // Check if the game is currently being downloaded
 
     const label = isDownloaded ? "Start" : isDownloadingNow ? "Downloading..." : "Download";
 
@@ -25,11 +25,12 @@ function DownloadButton() {
         }
     };
 
+
     return (
         <button
             className={`start-btn btn-strd ${isDownloadingNow ? "disabled" : ""}`}
             onClick={handleClick}
-            disabled={isDownloadingNow} // Désactive le bouton si le jeu actuel est en cours de téléchargement
+            disabled={isDownloadingNow} // disable the button if the game is currently being downloaded
             style={{ opacity: isDownloadingNow ? 0.5 : 1, pointerEvents: isDownloadingNow ? "none" : "auto" }}
         >
             <div>{label}</div>

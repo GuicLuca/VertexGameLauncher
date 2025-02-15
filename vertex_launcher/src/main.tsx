@@ -33,24 +33,14 @@ forwardConsole('error', error);
 
 //~ End of logging config ==========
 
-// ========= Backend_Testing =========
-// import { invoke } from "@tauri-apps/api/core";
+export function getFormatedBytes(bytes: number): string {
+  const sizes = ["B", "KiB", "MiB", "GiB", "TiB"];
+  if (bytes === 0) return "0B";
+  const i = Math.floor(Math.log(bytes) / Math.log(1024));
+  return parseFloat((bytes / Math.pow(1024, i)).toFixed(2)) + " " + sizes[i];
+}
 
-// function test_backend_functions() {
 
-//   invoke('get_game_list').then((result) => {
-//     const obj = JSON.parse(result as string);
-//     info("Game list received: " + obj);
-//   }).catch((err: string) => {
-//     error(err);
-//   });
-
-//   invoke("get_launcher_version").then((result) => {
-//     info("Launcher version received: " + result);
-//   });
-// }
-
-//~ End of Backend_Testing ==========
 
 // Listen for the app to be initialized
 once("app_initialized", () => {
@@ -63,7 +53,6 @@ once("app_initialized", () => {
     </React.StrictMode>,
   );
 });
-
 
 
 

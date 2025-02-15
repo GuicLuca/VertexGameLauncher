@@ -142,7 +142,7 @@ button {
 }
 
 .gameList {
-  width: 36%;
+  width: 30%;
   display: flex;
   position: relative;
   flex-direction: column;
@@ -153,39 +153,45 @@ button {
 .gameList img {
   align-items: center;
   margin: 0 auto;
-  width: 150px;
+  max-width: 120px;
+}
+.gameList .game-logo {
+  height: 90px;
 }
 .gameList span {
   height: 2px;
   margin: 8px 4px;
   margin-bottom: 0;
-  background-color: #E0E0E6;
+  background-color: #2F2F45;
 }
 .gameList .active-game {
   background: linear-gradient(to right, rgba(190, 190, 190, 0.368627451) 0%, rgba(151, 151, 151, 0) 90%);
   border-left: 2px solid #B0B0C3;
 }
-.gameList .games {
+.gameList .games-scroll {
   overflow-y: auto;
   scrollbar-width: thin;
   overflow-x: hidden;
-  padding-top: 8px;
-  padding-bottom: 100px;
   scrollbar-color: #2F2F45 #1C1C28;
+  direction: rtl;
+}
+.gameList .games {
+  direction: ltr;
+  padding-top: 8px;
 }
 .gameList .games .game {
   display: flex;
-  padding: 2% 5%;
-  margin-bottom: 8px;
+  padding: 0 5%;
   color: #E0E0E6;
   width: 90%;
   cursor: pointer;
 }
 .gameList .games .game img {
-  width: 30%;
+  width: 20%;
   margin: 0;
   -o-object-fit: contain;
      object-fit: contain;
+  padding: 0 0;
 }
 .gameList .games .game div {
   display: flex;
@@ -343,7 +349,7 @@ button {
   justify-content: space-around;
 }
 .gamePage .download-progress .download-info p {
-  margin: 0.5rem 8px;
+  margin: 0.2rem 8px;
 }
 .gamePage .download-progress .download-info strong {
   color: white;

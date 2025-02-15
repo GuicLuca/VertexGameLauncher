@@ -165,7 +165,7 @@ button {
 }
 
 .gameList {
-  width: 36%;
+  width: 30%;
   display: flex;
   position: relative;
   flex-direction: column;
@@ -176,14 +176,18 @@ button {
   img {
     align-items: center;
     margin: 0 auto;
-    width: 150px;
+    max-width: 120px;
+  }
+
+  .game-logo {
+    height: 90px;
   }
 
   span {
     height: 2px;
     margin: 8px 4px;
     margin-bottom: 0;
-    background-color: $text-primary;
+    background-color: $background-hover;
   }
 
   .active-game {
@@ -191,27 +195,33 @@ button {
     border-left: 2px solid $text-secondary;
   }
 
-
-  .games {
+  .games-scroll {
     overflow-y: auto;
     scrollbar-width: thin;
     overflow-x: hidden;
-    padding-top: 8px;
-    padding-bottom: 100px;
     scrollbar-color: $background-hover $background-color;
+    direction: rtl;
+  }
+
+
+  .games {
+    direction: ltr;
+    padding-top: 8px;
+    // Uncomment this line if you want to used the option butotn
+    //padding-bottom: 100px;
 
     .game {
       display: flex;
-      padding: 2% 5%;
-      margin-bottom: 8px;
+      padding: 0 5%;
       color: $text-primary;
       width: 90%;
       cursor: pointer;
 
       img {
-        width: 30%;
+        width: 20%;
         margin: 0;
         object-fit: contain;
+        padding: 0 0;
       }
 
       div {
@@ -397,7 +407,7 @@ button {
       justify-content: space-around;
 
       p {
-        margin: 0.5rem 8px;
+        margin: 0.2rem 8px;
       }
     }
 

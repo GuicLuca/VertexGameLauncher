@@ -5,7 +5,7 @@ import { convertFileSrc } from '@tauri-apps/api/core';
 function gamePage() {
     const { selectedGame } = useGame();
     const isDownloaded = false;
-    if (!selectedGame) return <div>Vous n'avez pas de jeux</div>;
+    if (!selectedGame) return <div>You don't have any game</div>;
     return (
         <div className='infoGame'>
             {/*  background image of the selected game */}
@@ -18,7 +18,7 @@ function gamePage() {
             <div className='infos-jeu'>
                 <div className='game-descritpion'>
                     {/* game desc */}
-                    <h3>Game Description</h3>
+                    {/* <h3>Game Description</h3> */}
                     <p>{selectedGame.description}</p>
                 </div>
                 
@@ -34,14 +34,14 @@ function gamePage() {
                 <div>
                     <h3>Tags</h3>
                     <div>
-                        {selectedGame.tags.map((os: string, i: number) => (
-                            <p key={i}>{os}</p>
+                        {selectedGame.tags.map((tag: string, i: number) => (
+                            <p key={i}>{tag}</p>
                         ))}
                     </div>
                 </div>
                 {!isDownloaded && (
                     <div>
-                        <h3>Système d'exploitation disponible</h3>
+                        <h3>Suported Os</h3>
                         <div>
                             {selectedGame.platform.map((os: string, i: number) => (
                                 <p key={i}>{os}</p>

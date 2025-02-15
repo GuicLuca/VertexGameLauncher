@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { listen } from "@tauri-apps/api/event";
 import { useGame } from "./gameContext.tsx";
+import { getFormatedBytes } from "../main.tsx";
 
 interface DownloadProgressProps {
-  gameId: number; // On spécifie que gameId est un nombre
+  gameId: number; // Specify the game id is a number for the rest of the widget
 }
 
 function downloadProgress({ gameId }: DownloadProgressProps) {
@@ -16,17 +17,16 @@ function downloadProgress({ gameId }: DownloadProgressProps) {
     speed: "0 MB/s",
     steps: "Starting",
   });
-  const { selectedGame } = useGame(); // Récupérer le jeu sélectionné
+  const { selectedGame } = useGame(); // Fetch the selected game from the context
   const [downloadingGameId, setDownloadingGameId] = useState<number | null>(null);
 
   useEffect(() => {
-    // Écoute les événements pour ce jeu spécifique
+    // Make this component listen to the download progress of his game only
     const eventName = `download_progress_${gameId}`;
     const unlisten = listen(eventName, (event) => {
       const data = event.payload as DownloadPayload;
       setDownloadData(data);
-      console.log(data.steps)
-      // Vérifie si le téléchargement est en cours et met à jour l'ID du jeu en téléchargement
+      // Check if the download is in progress and set the downloadingGameId
       if (data.steps !== 'Complete') {
         setDownloadingGameId(gameId);
       } else {
@@ -34,19 +34,19 @@ function downloadProgress({ gameId }: DownloadProgressProps) {
       }
     });
 
-    // Nettoyage lorsque le composant est démonté
+    
     return () => {
+      // Clean up the listener once the component is unmounted
       unlisten.then((fn) => fn());
     };
   }, [gameId]);
 
-  // Vérifie si l'ID du jeu sélectionné est le même que celui en téléchargement
+  // Check if the selected game is the one being downloaded to display the progress widget only on the targeted game
   if (selectedGame?.id !== downloadingGameId) return null;
   const progressPercentage = parseFloat(downloadData.percentage);
 
   return (
     <div className="download-progress">
-      <h3>{downloadData.steps}</h3>
       <div className="progress-bar-container" style={{ marginBottom: "1rem" }}>
         <div
           className="progress-bar"
@@ -58,18 +58,19 @@ function downloadProgress({ gameId }: DownloadProgressProps) {
       </div>
       <div className="download-info">
         <p>
-          <strong>Vitesse :</strong> <br />{downloadData.speed}
+          <strong>Speed:</strong> {downloadData.speed}
         </p>
         <p>
-          <strong>Pourcentage :</strong> <br />{downloadData.percentage}
+          <strong>Progress:</strong> {downloadData.percentage}
         </p>
         <p>
-          <strong>Temps restant :</strong> <br />{downloadData.remaining_time}
+          <strong>Remainng time:</strong> {downloadData.remaining_time}
         </p>
         <p>
-          <strong>Size of the game :</strong> <br />{(downloadData.file_size / 1073741824).toFixed(2)} Go
+          <strong>Totale size:</strong> {getFormatedBytes(downloadData.file_size)}
         </p>
       </div>
+      <h3>{downloadData.steps}</h3>
     </div>
   );
 };
