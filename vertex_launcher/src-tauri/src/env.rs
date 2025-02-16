@@ -113,6 +113,11 @@ pub(crate) const LOG_TIMEZONE: tauri_plugin_log::TimezoneStrategy =
 /// the download progression.
 pub(crate) const UPDATE_RATE: u64 = 1000; // 1000ms
 
+/// Notification message when the download is complete
+pub fn generate_download_complete_message(game_name: &str) -> String {
+    format!("{} has been successfully downloaded.", game_name)
+}
+
 ///# ====================================
 ///# == Event configuration
 ///# ====================================
