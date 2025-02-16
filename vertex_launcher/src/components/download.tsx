@@ -1,8 +1,8 @@
-import { invoke } from "@tauri-apps/api/core";
-import { useGame } from './gameContext.tsx';
+import {invoke} from "@tauri-apps/api/core";
+import {useGame} from './gameContext.tsx';
 
 function DownloadButton() {
-    const { selectedGame, downloadingGames, setDownloadingGames } = useGame();
+    const {selectedGame, downloadingGames, setDownloadingGames} = useGame();
 
     const isDownloaded = selectedGame.game_archive.link.local_path !== null;
     const isDownloadingNow = downloadingGames.has(selectedGame.id); // Check if the game is currently being downloaded
@@ -11,14 +11,14 @@ function DownloadButton() {
 
     const handleClick = async () => {
         if (isDownloaded) {
-            invoke("launch", { game: selectedGame.id });
+            invoke("launch", {game: selectedGame.id});
         } else {
-            // Créer un nouveau Set pour forcer la mise à jour
+            // Force the update of the component by creating a new Set (changing the state)
             const newDownloadingGames = new Set(downloadingGames);
             newDownloadingGames.add(selectedGame.id);
             setDownloadingGames(newDownloadingGames);
 
-            invoke("download", { game: selectedGame.id })
+            invoke("download", {game: selectedGame.id})
                 .catch((error) => {
                     console.error('Error during download:', error);
                 });
@@ -31,7 +31,7 @@ function DownloadButton() {
             className={`start-btn btn-strd ${isDownloadingNow ? "disabled" : ""}`}
             onClick={handleClick}
             disabled={isDownloadingNow} // disable the button if the game is currently being downloaded
-            style={{ opacity: isDownloadingNow ? 0.5 : 1, pointerEvents: isDownloadingNow ? "none" : "auto" }}
+            style={{opacity: isDownloadingNow ? 0.5 : 1, pointerEvents: isDownloadingNow ? "none" : "auto"}}
         >
             <div>{label}</div>
             <p>V{selectedGame.version}</p>

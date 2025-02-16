@@ -1,10 +1,10 @@
-use log::error;
 use crate::env;
+use crate::env::LOCAL_GAME_LIST;
+use crate::errors::Verror::GameListFetchError;
+use log::error;
 use serde::Serialize;
 use serde_json::Value;
 use tauri::{AppHandle, Emitter};
-use crate::env::LOCAL_GAME_LIST;
-use crate::errors::Verror::GameListFetchError;
 
 #[allow(dead_code)]
 #[derive(Debug, Clone, Serialize)]
@@ -47,7 +47,7 @@ impl GameDownload {
             file_size: 0,
             downloaded: 0,
             steps: DownloadSteps::Starting,
-            //Concaténation du event download + game id 
+            // The event name result of the concatenation of the download progress event and the game id
             event_name: format!("{}_{}", env::EVENT_DOWNLOAD_PROGRESS, game_id),
             app_handle,
             time_start: None,
@@ -80,8 +80,8 @@ impl GameDownload {
             .emit(&self.event_name, self.get_state())
             .expect("Failed to broadcast the download progress");
     }
-    
-    pub async fn complete(&mut self){
+
+    pub async fn complete(&mut self) {
         self.set_steps(DownloadSteps::Complete);
 
         let game_name = {
@@ -91,17 +91,24 @@ impl GameDownload {
                 .ok_or(GameListFetchError(format!(
                     "Game with id {} not found",
                     &self.game_id
-                ))).map_or(self.game_id.to_string(), |game| game.title.to_owned())
+                )))
+                .map_or(self.game_id.to_string(), |game| game.title.to_owned())
                 .to_owned()
         };
-        
+
         // by default show a notification
-        if let Err(e) = notifica::notify("Vertex Launcher", &*format!("L'instalation de {} est terminée.", game_name)){
+        if let Err(e) = notifica::notify(
+            "Vertex Launcher",
+            &*format!("L'instalation de {} est terminée.", game_name),
+        ) {
             error!("Failed to get game name for notification body. {}", e);
         }
 
         self.app_handle
-            .emit(&format!("{}_{}", env::EVENT_DOWNLOAD_COMPLETED, &self.game_id), &self.game_id)
+            .emit(
+                &format!("{}_{}", env::EVENT_DOWNLOAD_COMPLETED, &self.game_id),
+                &self.game_id,
+            )
             .expect("Failed to broadcast the download completed event");
     }
 

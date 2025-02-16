@@ -1,8 +1,8 @@
 use crate::quit_app;
+use log::trace;
 use tauri::menu::{Menu, MenuEvent, MenuItem};
 use tauri::tray::{TrayIcon, TrayIconBuilder, TrayIconEvent};
 use tauri::{App, AppHandle, Manager};
-use log::trace;
 
 pub fn setup_system_tray(app: &App) -> Result<(), Box<dyn std::error::Error>> {
     TrayIconBuilder::with_id("tray")

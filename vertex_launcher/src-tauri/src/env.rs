@@ -111,7 +111,7 @@ pub(crate) const LOG_TIMEZONE: tauri_plugin_log::TimezoneStrategy =
 
 /// The UPDATE_RATE is the period used to advertise to the frontend
 /// the download progression.
-pub(crate) const UPDATE_RATE: u64 = 100; // default: 1000ms
+pub(crate) const UPDATE_RATE: u16 = 100; // default: 100ms
 
 ///# ====================================
 ///# == Event configuration

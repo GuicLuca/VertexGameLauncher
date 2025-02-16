@@ -77,9 +77,7 @@ pub async fn get_game_list() -> Result<String, Verror> {
     // Serialize the games list to an array of games
     let mut games: Vec<Game> = game_list.values().cloned().collect();
     // Order games by weight (Higher first)
-    games.sort_by(|a, b|{
-        a.weight.cmp(&b.weight).reverse()
-    });
+    games.sort_by(|a, b| a.weight.cmp(&b.weight).reverse());
     let games_json = serde_json::to_string(&games)?;
 
     Ok(games_json)
@@ -144,7 +142,7 @@ pub async fn download(app_handle: tauri::AppHandle, game: u8) -> errors::Result<
     download.set_start_time(start_time);
     download.set_steps(Downloading);
 
-    let mut last_update = Instant::now() - std::time::Duration::from_millis(UPDATE_RATE);
+    let mut last_update = Instant::now() - std::time::Duration::from_millis(UPDATE_RATE as u64);
 
     let mut bytes: Vec<u8> = Vec::with_capacity(total_size as usize);
     let mut downloaded: u64 = 0;
@@ -162,7 +160,7 @@ pub async fn download(app_handle: tauri::AppHandle, game: u8) -> errors::Result<
 
         download.update(downloaded, None);
 
-        if (last_update.elapsed().as_millis() as u64) < UPDATE_RATE {
+        if (last_update.elapsed().as_millis() as u16) < UPDATE_RATE {
             // don't advertise the download progress too often
             continue;
         }
