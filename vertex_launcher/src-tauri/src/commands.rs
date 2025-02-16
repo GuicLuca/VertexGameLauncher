@@ -77,9 +77,7 @@ pub async fn get_game_list() -> Result<String, Verror> {
     // Serialize the games list to an array of games
     let mut games: Vec<Game> = game_list.values().cloned().collect();
     // Order games by weight (Higher first)
-    games.sort_by(|a, b|{
-        a.weight.cmp(&b.weight).reverse()
-    });
+    games.sort_by(|a, b| a.weight.cmp(&b.weight).reverse());
     let games_json = serde_json::to_string(&games)?;
 
     Ok(games_json)
