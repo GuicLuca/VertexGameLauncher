@@ -111,7 +111,7 @@ pub(crate) const LOG_TIMEZONE: tauri_plugin_log::TimezoneStrategy =
 
 /// The UPDATE_RATE is the period used to advertise to the frontend
 /// the download progression.
-pub(crate) const UPDATE_RATE: u64 = 1000; // 1000ms
+pub(crate) const UPDATE_RATE: u16 = 100; // default: 100ms
 
 /// Notification message when the download is complete
 pub fn generate_download_complete_message(game_name: &str) -> String {
@@ -128,6 +128,9 @@ pub(crate) const EVENT_INIT: &str = "app_initialized";
 
 /// The event name used to broadcast the game download progress
 pub(crate) const EVENT_DOWNLOAD_PROGRESS: &str = "download_progress";
+
+/// The event name used to broadcast the game download completed
+pub(crate) const EVENT_DOWNLOAD_COMPLETED: &str = "download_completed";
 
 /// The event name used to share the new game list with the frontend
 pub(crate) const EVENT_GAME_LIST_UPDATED: &str = "game_list_updated";

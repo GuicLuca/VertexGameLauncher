@@ -142,7 +142,7 @@ pub async fn download(app_handle: tauri::AppHandle, game: u8) -> errors::Result<
     download.set_start_time(start_time);
     download.set_steps(Downloading);
 
-    let mut last_update = Instant::now() - std::time::Duration::from_millis(UPDATE_RATE);
+    let mut last_update = Instant::now() - std::time::Duration::from_millis(UPDATE_RATE as u64);
 
     let mut bytes: Vec<u8> = Vec::with_capacity(total_size as usize);
     let mut downloaded: u64 = 0;
@@ -160,7 +160,7 @@ pub async fn download(app_handle: tauri::AppHandle, game: u8) -> errors::Result<
 
         download.update(downloaded, None);
 
-        if (last_update.elapsed().as_millis() as u64) < UPDATE_RATE {
+        if (last_update.elapsed().as_millis() as u16) < UPDATE_RATE {
             // don't advertise the download progress too often
             continue;
         }
@@ -170,6 +170,9 @@ pub async fn download(app_handle: tauri::AppHandle, game: u8) -> errors::Result<
 
         last_update = Instant::now();
     }
+    // advertise a last time to get the 100% of progress
+    download.advertise();
+
     // download completed
     info!(
         "Download completed in {:.2} seconds",
@@ -186,7 +189,7 @@ pub async fn download(app_handle: tauri::AppHandle, game: u8) -> errors::Result<
             local_game.game_archive.strip_top_level_folder,
         )?;
 
-        // Update the local game list with the downloaded file path
+        // 5 - Update the local game list with the downloaded file path
         let mut game_list = LOCAL_GAME_LIST.write().await;
         let update_local_game = game_list.get_mut(&game).ok_or(GameListFetchError(format!(
             "Game with id {} not found",

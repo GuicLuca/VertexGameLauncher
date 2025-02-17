@@ -1,4 +1,5 @@
 use crate::quit_app;
+use log::trace;
 use tauri::menu::{Menu, MenuEvent, MenuItem};
 use tauri::tray::{TrayIcon, TrayIconBuilder, TrayIconEvent};
 use tauri::{App, AppHandle, Manager};
@@ -47,14 +48,14 @@ pub fn on_tray_menu_event(
     app: &AppHandle,
     event: MenuEvent,
 ) -> Result<(), Box<dyn std::error::Error>> {
-    println!("Event tray menu received : {}", event.id.as_ref());
+    trace!("Event tray menu received : {}", event.id.as_ref());
     match event.id.as_ref() {
         "quit" => {
             quit_app(app);
             Ok(())
         }
         "hide" => {
-            println!("Hide menu item clicked");
+            trace!("Hide menu item clicked");
             // update window visibility and refresh tray menu
             if let Some(window) = app.get_webview_window("main") {
                 if window.is_visible().unwrap() {
@@ -67,7 +68,7 @@ pub fn on_tray_menu_event(
             Ok(())
         }
         _ => {
-            dbg!("Unhandled tray menu event: {:?}", event);
+            trace!("Unhandled tray menu event: {:?}", event);
             Ok(())
         }
     }
@@ -79,7 +80,7 @@ fn on_tray_icon_event(
 ) -> Result<(), Box<dyn std::error::Error>> {
     match event {
         TrayIconEvent::DoubleClick { .. } => {
-            dbg!("system tray received a double click");
+            trace!("system tray received a double click");
             let app = tray.app_handle();
 
             if let Some(window) = app.get_webview_window("main") {

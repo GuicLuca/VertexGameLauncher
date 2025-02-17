@@ -33,8 +33,7 @@ pub fn run() {
         file_name: Some("logs".to_string()),
     }];
 
-    let tauri_builder: Builder<Wry> =
-        tauri::Builder::default();
+    let tauri_builder: Builder<Wry> = tauri::Builder::default();
 
     ///### Plugins configuration
     /// For special configurations options, prefer using the env module

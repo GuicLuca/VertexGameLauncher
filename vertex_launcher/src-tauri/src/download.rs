@@ -47,6 +47,7 @@ impl GameDownload {
             file_size: 0,
             downloaded: 0,
             steps: DownloadSteps::Starting,
+            // The event name result of the concatenation of the download progress event and the game id
             event_name: format!("{}_{}", env::EVENT_DOWNLOAD_PROGRESS, game_id),
             app_handle,
             time_start: None,
@@ -59,6 +60,7 @@ impl GameDownload {
 
     pub fn set_steps(&mut self, steps: DownloadSteps) {
         self.steps = steps;
+        self.advertise();
     }
 
     pub fn set_start_time(&mut self, time_start: std::time::Instant) {
@@ -79,7 +81,8 @@ impl GameDownload {
             .expect("Failed to broadcast the download progress");
     }
 
-    pub async fn complete(&self) {
+    pub async fn complete(&mut self) {
+        self.set_steps(DownloadSteps::Complete);
         let game_name = {
             let game_list = LOCAL_GAME_LIST.read().await;
             game_list
@@ -99,6 +102,13 @@ impl GameDownload {
         ) {
             error!("Failed to get game name for notification body. {}", e);
         }
+
+        self.app_handle
+            .emit(
+                &format!("{}_{}", env::EVENT_DOWNLOAD_COMPLETED, &self.game_id),
+                &self.game_id,
+            )
+            .expect("Failed to broadcast the download completed event");
     }
 
     pub fn get_state(&self) -> Value {

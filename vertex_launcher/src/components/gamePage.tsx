@@ -1,15 +1,16 @@
 import Download from './download.tsx';
-import { useGame } from './gameContext.tsx'
-import { convertFileSrc } from '@tauri-apps/api/core';
+import {useGame} from './gameContext.tsx'
+import {convertFileSrc} from '@tauri-apps/api/core';
 
 function gamePage() {
-    const { selectedGame } = useGame();
+    const {selectedGame} = useGame();
     const isDownloaded = false;
-    if (!selectedGame) return <div>Vous n'avez pas de jeux</div>;
+    if (!selectedGame) return <div>You don't have any game</div>;
     return (
-        <div className='gamePage'>
+        <div className='infoGame'>
             {/*  background image of the selected game */}
-            <img className='background-img' src={convertFileSrc(selectedGame.background_image.local_path)} alt={selectedGame.title} />
+            <img className='background-img' src={convertFileSrc(selectedGame.background_image.local_path)}
+                 alt={selectedGame.title}/>
             {/* game name */}
             <div className='title'>
                 <h1>{selectedGame.title}</h1>
@@ -18,15 +19,15 @@ function gamePage() {
             <div className='infos-jeu'>
                 <div className='game-descritpion'>
                     {/* game desc */}
-                    <h3>Game Description</h3>
+                    {/* <h3>Game Description</h3> */}
                     <p>{selectedGame.description}</p>
                 </div>
-                
-                {/* TODO: uncoment this section when supporting last update text from the backend */}
+
+                {/* TODO: uncomment this section when supporting last update text from the backend */}
                 {/* <div> */}
-                    {/* infos of the last update */}
-                    {/* <h3>Lastest Update</h3> */}
-                    {/* <p>Informations sur la dernière mise à jour...</p> */}
+                {/* infos of the last update */}
+                {/* <h3>Lastest Update</h3> */}
+                {/* <p>Patch Note content here...</p> */}
                 {/* </div> */}
             </div>
             {/* game features */}
@@ -34,14 +35,14 @@ function gamePage() {
                 <div>
                     <h3>Tags</h3>
                     <div>
-                        {selectedGame.tags.map((os: string, i: number) => (
-                            <p key={i}>{os}</p>
+                        {selectedGame.tags.map((tag: string, i: number) => (
+                            <p key={i}>{tag}</p>
                         ))}
                     </div>
                 </div>
                 {!isDownloaded && (
                     <div>
-                        <h3>Système d'exploitation disponible</h3>
+                        <h3>Supported Os</h3>
                         <div>
                             {selectedGame.platform.map((os: string, i: number) => (
                                 <p key={i}>{os}</p>
@@ -50,11 +51,7 @@ function gamePage() {
                     </div>
                 )}
             </div>
-            {/* <div className='start-btn btn-strd'>
-                {isDownloaded ? <div>Start</div> : <div>Download</div>}
-                <p>V{selectedGame.version}</p>
-            </div> */}
-            <Download />
+            <Download/>
         </div>
     )
 }

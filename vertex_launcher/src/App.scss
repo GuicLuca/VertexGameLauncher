@@ -140,23 +140,24 @@ button {
   }
 }
 
-.btn-strd{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 225px;
-    height: 75px;
-    background-color: $secondary-background-color;
-    border-radius: 16px;
-    margin: 0 auto;
-    color: $text-primary;
-    font-size: 1.4em;
+.btn-strd {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 225px;
+  height: 75px;
+  background-color: $secondary-background-color;
+  border-radius: 16px;
+  margin: 0 auto;
+  color: $text-primary;
+  font-size: 1.4em;
+  transition: all 0.3s;
+
+  &:hover {
     transition: all 0.3s;
-    &:hover{
-      transition: all 0.3s;
-      background-color: $button-hover;
-      cursor: pointer;
-    }
+    background-color: $button-hover;
+    cursor: pointer;
+  }
 }
 
 .launcher {
@@ -164,7 +165,7 @@ button {
 }
 
 .gameList {
-  width: 36%;
+  width: 30%;
   display: flex;
   position: relative;
   flex-direction: column;
@@ -175,62 +176,74 @@ button {
   img {
     align-items: center;
     margin: 0 auto;
-    width: 150px;
+    max-width: 120px;
+  }
+
+  .game-logo {
+    height: 90px;
   }
 
   span {
     height: 2px;
     margin: 8px 4px;
     margin-bottom: 0;
-    background-color: $text-primary;
+    background-color: $background-hover;
   }
-  .active-game{
+
+  .active-game {
     background: linear-gradient(to right, #bebebe5e 0%, #97979700 90%);
     border-left: 2px solid $text-secondary;
   }
 
-  
-  .games{
+  .games-scroll {
     overflow-y: auto;
     scrollbar-width: thin;
     overflow-x: hidden;
-    padding-top: 8px;
-    padding-bottom: 100px;
     scrollbar-color: $background-hover $background-color;
-    
+    direction: rtl;
+  }
+
+
+  .games {
+    direction: ltr;
+    padding-top: 8px;
+    // Uncomment this line if you want to used the option butotn
+    //padding-bottom: 100px;
+
     .game {
       display: flex;
-      padding: 2% 5%;
-      margin-bottom: 8px;
+      padding: 0 5%;
       color: $text-primary;
       width: 90%;
       cursor: pointer;
-  
+
       img {
-        width: 30%;
+        width: 20%;
         margin: 0;
         object-fit: contain;
+        padding: 0 0;
       }
+
       div {
         display: flex;
         flex-direction: column;
         justify-content: center;
         margin: 0 5%;
         max-width: 60%;
-  
+
         h3 {
           margin: 0;
         }
-  
+
         p {
           margin: 0;
           font-size: 0.6em;
         }
       }
-    }   
+    }
   }
 
-  .option{
+  .option {
     position: absolute;
     width: 175px;
     height: 50px;
@@ -241,109 +254,165 @@ button {
 }
 
 .gamePage {
-  position: relative;
-  overflow: hidden;
-  color: $text-primary;
+  display: flex;
+  flex-direction: column;
   width: 100%;
-  background-color: rgba(0, 0, 0, 0.40);
-  color: $text-primary;
 
-  .background-img {
-    z-index: -10;
-    position: absolute;
-    top: 0;
-    left: 0;
+  .infoGame {
     height: 100%;
-    object-fit: cover;
-  }
-  .title{
-    backdrop-filter: blur(4px);
-    padding: 16px 0;
-    h1{
-      text-shadow: 1px 1px 7px rgba(255, 255, 255, 0.41);
-      font-size: 3.2em;
-      margin: 0;
-      line-height: 1;
-      +h3{
-        text-align: center;
-        margin: 0;
-        font-weight: 300;
-      }
+    position: relative;
+    overflow: hidden;
+    color: $text-primary;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.40);
+    color: $text-primary;
+
+
+    .background-img {
+      z-index: -10;
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      object-fit: cover;
     }
-  }
-  .infos-jeu {
-    position: absolute;
-    display: flex;
-    // justify-content: space-around;
-    top: 50%;
-    left: 50%;
-    translate: -50% -50%;
-    width: 90%;
-    div {
-      border: 1px solid $text-secondary;
-      max-height: 200px;
-      padding: 16px;
-      width: 40%;
-      border-radius: 16px;
-      background-color: rgba(0, 0, 0, 0.7);
-      text-overflow: ellipsis;
 
-      h3 {
-        margin-top: 0;
-      }
+    .title {
+      backdrop-filter: blur(4px);
+      padding: 16px 0;
 
-      p {
-        max-height: 170px;
-        overflow-y: auto;
-        scrollbar-color: $background-hover rgba(0, 0, 0, 0) ;
-        scrollbar-width: thin;
-        overflow-x: hidden;
-        text-overflow: ellipsis;
+      h1 {
+        text-shadow: 1px 1px 7px rgba(255, 255, 255, 0.41);
+        font-size: 3.2em;
         margin: 0;
-      }
-    }
-  }
+        line-height: 1;
 
-  .game-feat {
-    position: absolute;
-    bottom: 16px;
-    left: 16px;
-    max-width: 60%;
-    background-color: rgba(0, 0, 0, 0.8);
-    padding: 0 8px;
-    border-radius: 16px;
-    >div {
-      padding: 4px 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      h3{
-        margin: 4px 0;
-      }
-      div {
-        display: flex;
-        flex-wrap: wrap;
-        p{
+        + h3 {
+          text-align: center;
           margin: 0;
-          margin-right: 32px;
-          white-space: nowrap;
+          font-weight: 300;
         }
       }
     }
+
+    .infos-jeu {
+      display: flex;
+      // justify-content: space-around;
+      margin: 2%;
+      width: 90%;
+
+      div {
+        border: 1px solid $text-secondary;
+        max-height: 200px;
+        padding: 16px;
+        width: 40%;
+        border-radius: 16px;
+        background-color: rgba(0, 0, 0, 0.7);
+        text-overflow: ellipsis;
+
+        h3 {
+          margin-top: 0;
+        }
+
+        p {
+          max-height: 170px;
+          overflow-y: auto;
+          scrollbar-color: $background-hover rgba(0, 0, 0, 0);
+          scrollbar-width: thin;
+          overflow-x: hidden;
+          text-overflow: ellipsis;
+          margin: 0;
+        }
+      }
+    }
+
+    .game-feat {
+      position: absolute;
+      bottom: 16px;
+      left: 16px;
+      max-width: 60%;
+      background-color: rgba(0, 0, 0, 0.8);
+      padding: 0 8px;
+      border-radius: 16px;
+
+      > div {
+        padding: 4px 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        h3 {
+          margin: 4px 0;
+        }
+
+        div {
+          display: flex;
+          flex-wrap: wrap;
+
+          p {
+            margin: 0;
+            margin-right: 32px;
+            white-space: nowrap;
+          }
+        }
+      }
+    }
+
+    .start-btn {
+      position: absolute;
+      bottom: 16px;
+      right: 16px;
+
+      p {
+        margin: 0;
+        font-size: 0.4em;
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        translate: -50%;
+      }
+    }
   }
 
-  .start-btn {
-    position: absolute;
-    bottom: 16px;
-    right: 16px;
+  .download-progress {
+    display: flex;
+    position: relative;
+    text-align: left;
+    font-family: Arial, sans-serif;
 
-    p {
-      margin: 0;
-      font-size: 0.4em;
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      translate: -50%;
+    h3 {
+      margin: auto 32px;
     }
+
+    .progress-bar-container {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: -10;
+      background-color: $secondary-background-color;
+      overflow: hidden;
+
+      .progress-bar {
+        transition: width 0.3s ease;
+        height: 100%;
+      }
+    }
+
+
+    .download-info {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+
+      p {
+        margin: 0.2rem 8px;
+      }
+    }
+
+    .download-info strong {
+      color: white;
+    }
+
   }
 }
