@@ -160,7 +160,7 @@ impl Game {
             version,
             platform,
             tags,
-            weight
+            weight,
         }
     }
 
@@ -216,7 +216,7 @@ impl Game {
             version,
             platform,
             tags,
-            weight
+            weight,
         ))
     }
 

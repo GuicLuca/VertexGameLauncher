@@ -29,16 +29,12 @@ pub fn run() {
     ];
     /// Release profile (default: LogDir)
     #[cfg(not(debug_assertions))]
-    let log_targets: [tauri_plugin_log::TargetKind; 1] =[
-        tauri_plugin_log::TargetKind::LogDir {
-            file_name: Some("logs".to_string()),
-        }];
-    
-    
-    
-    
-    
-    let tauri_builder: Builder<Wry> = tauri::Builder::default();
+    let log_targets: [tauri_plugin_log::TargetKind; 1] = [tauri_plugin_log::TargetKind::LogDir {
+        file_name: Some("logs".to_string()),
+    }];
+
+    let tauri_builder: Builder<Wry> =
+        tauri::Builder::default();
 
     ///### Plugins configuration
     /// For special configurations options, prefer using the env module
@@ -48,10 +44,20 @@ pub fn run() {
         .plugin(tauri_plugin_store::Builder::new().build())
         .plugin(tauri_plugin_http::init())
         .plugin(tauri_plugin_fs::init())
+        .plugin(tauri_plugin_single_instance::init(|app, _args, _cwd| {
+            // when a new instance is opened, show the main window, try to focus and show th main window
+            if let Some(window) = app.get_webview_window("main") {
+                if !window.is_visible().unwrap() {
+                    let _ = window.show();
+                }
+                let _ = window.set_focus();
+            }
+        }))
         .plugin(
             tauri_plugin_log::Builder::default()
                 .targets(
-                    log_targets.into_iter()
+                    log_targets
+                        .into_iter()
                         .map(Target::new)
                         .collect::<Vec<Target>>(),
                 )

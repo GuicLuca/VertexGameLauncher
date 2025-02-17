@@ -1,10 +1,10 @@
-use log::error;
 use crate::env;
+use crate::env::{generate_download_complete_message, LOCAL_GAME_LIST};
+use crate::errors::Verror::GameListFetchError;
+use log::error;
 use serde::Serialize;
 use serde_json::Value;
 use tauri::{AppHandle, Emitter};
-use crate::env::LOCAL_GAME_LIST;
-use crate::errors::Verror::GameListFetchError;
 
 #[allow(dead_code)]
 #[derive(Debug, Clone, Serialize)]
@@ -78,8 +78,8 @@ impl GameDownload {
             .emit(&self.event_name, self.get_state())
             .expect("Failed to broadcast the download progress");
     }
-    
-    pub async fn complete(&self){
+
+    pub async fn complete(&self) {
         let game_name = {
             let game_list = LOCAL_GAME_LIST.read().await;
             game_list
@@ -87,12 +87,16 @@ impl GameDownload {
                 .ok_or(GameListFetchError(format!(
                     "Game with id {} not found",
                     &self.game_id
-                ))).map_or(self.game_id.to_string(), |game| game.title.to_owned())
+                )))
+                .map_or(self.game_id.to_string(), |game| game.title.to_owned())
                 .to_owned()
         };
-        
+
         // by default show a notification
-        if let Err(e) = notifica::notify("Vertex Launcher", &*format!("L'instalation de {} est terminée.", game_name)){
+        if let Err(e) = notifica::notify(
+            "Vertex Launcher",
+            &generate_download_complete_message(&game_name),
+        ) {
             error!("Failed to get game name for notification body. {}", e);
         }
     }
