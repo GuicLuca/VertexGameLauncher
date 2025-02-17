@@ -1,5 +1,5 @@
 use crate::env;
-use crate::env::LOCAL_GAME_LIST;
+use crate::env::{generate_download_complete_message, LOCAL_GAME_LIST};
 use crate::errors::Verror::GameListFetchError;
 use log::error;
 use serde::Serialize;
@@ -83,7 +83,6 @@ impl GameDownload {
 
     pub async fn complete(&mut self) {
         self.set_steps(DownloadSteps::Complete);
-
         let game_name = {
             let game_list = LOCAL_GAME_LIST.read().await;
             game_list
@@ -99,7 +98,7 @@ impl GameDownload {
         // by default show a notification
         if let Err(e) = notifica::notify(
             "Vertex Launcher",
-            &*format!("L'instalation de {} est terminée.", game_name),
+            &generate_download_complete_message(&game_name),
         ) {
             error!("Failed to get game name for notification body. {}", e);
         }

@@ -43,6 +43,15 @@ pub fn run() {
         .plugin(tauri_plugin_store::Builder::new().build())
         .plugin(tauri_plugin_http::init())
         .plugin(tauri_plugin_fs::init())
+        .plugin(tauri_plugin_single_instance::init(|app, _args, _cwd| {
+            // when a new instance is opened, show the main window, try to focus and show th main window
+            if let Some(window) = app.get_webview_window("main") {
+                if !window.is_visible().unwrap() {
+                    let _ = window.show();
+                }
+                let _ = window.set_focus();
+            }
+        }))
         .plugin(
             tauri_plugin_log::Builder::default()
                 .targets(
