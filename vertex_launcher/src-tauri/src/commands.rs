@@ -226,12 +226,32 @@ pub async fn download(app_handle: tauri::AppHandle, game: u8) -> errors::Result<
             env::STORE_LOCAL_GAME_LIST_KEY,
             serde_json::to_value(&*game_list).unwrap(),
         );
+        app_handle.emit(
+            &format!("download_completed_{}", game),
+            serde_json::to_string(&game_list.get(&game).unwrap()).unwrap(),
+        )?;
     }
     // Use the get game list command to update the frontend ensuring the format is always the same for the frontend
     app_handle.emit(env::EVENT_GAME_LIST_UPDATED, get_game_list().await?)?;
 
     download.complete().await;
     Ok(())
+}
+
+#[tauri::command]
+pub async fn get_game(game: u8) -> Result<String, Verror> {
+    let game_list = LOCAL_GAME_LIST.read().await;
+
+    match game_list.get(&game) {
+        Some(game_data) => {
+            let game_json = serde_json::to_string(&game_data)?;
+            Ok(game_json)
+        }
+        None => Err(GameListFetchError(format!(
+            "Game with id {} not found",
+            game
+        ))),
+    }
 }
 
 /// ## Launch a game
