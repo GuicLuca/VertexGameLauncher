@@ -83,6 +83,42 @@ pub async fn get_game_list() -> Result<String, Verror> {
     Ok(games_json)
 }
 
+///## Get game command
+/// **Description**: Get a specific game by its ID from the local game list.<br>
+/// **Frontend usage**:
+/// ```typescript
+/// invoke('get_game', {game: id})
+/// .then((gameData) => {
+///    let game = JSON.parse(gameData);
+///    // use the game data ...
+/// })
+/// .catch((error) => {
+///   console.error(error);
+/// });
+/// ```
+///
+/// **Parameters**:<br>
+/// NAME (TYPE)\[SOURCE]: DESCRIPTION
+/// - game (u8)\[FrontEnd]: The ID of the game to retrieve.
+///
+/// **Returns**:
+/// - Result<String, Verror>: JSON string representing the game data on success, or an error if game is not found
+#[tauri::command]
+pub async fn get_game(game: u8) -> Result<String, Verror> {
+    let game_list = LOCAL_GAME_LIST.read().await;
+
+    match game_list.get(&game) {
+        Some(game_data) => {
+            let game_json = serde_json::to_string(&game_data)?;
+            Ok(game_json)
+        }
+        None => Err(GameListFetchError(format!(
+            "Game with id {} not found",
+            game
+        ))),
+    }
+}
+
 /// ## Download command
 /// **Description**: Download a file from the internet.<br>
 /// **Frontend usage**:
@@ -226,10 +262,6 @@ pub async fn download(app_handle: tauri::AppHandle, game: u8) -> errors::Result<
             env::STORE_LOCAL_GAME_LIST_KEY,
             serde_json::to_value(&*game_list).unwrap(),
         );
-        app_handle.emit(
-            &format!("download_completed_{}", game),
-            serde_json::to_string(&game_list.get(&game).unwrap()).unwrap(),
-        )?;
     }
     // Use the get game list command to update the frontend ensuring the format is always the same for the frontend
     app_handle.emit(env::EVENT_GAME_LIST_UPDATED, get_game_list().await?)?;
@@ -238,21 +270,6 @@ pub async fn download(app_handle: tauri::AppHandle, game: u8) -> errors::Result<
     Ok(())
 }
 
-#[tauri::command]
-pub async fn get_game(game: u8) -> Result<String, Verror> {
-    let game_list = LOCAL_GAME_LIST.read().await;
-
-    match game_list.get(&game) {
-        Some(game_data) => {
-            let game_json = serde_json::to_string(&game_data)?;
-            Ok(game_json)
-        }
-        None => Err(GameListFetchError(format!(
-            "Game with id {} not found",
-            game
-        ))),
-    }
-}
 
 /// ## Launch a game
 /// **Description**: Launch a game using its executable file.<br>

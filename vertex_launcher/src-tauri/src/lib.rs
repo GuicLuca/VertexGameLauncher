@@ -98,9 +98,9 @@ pub fn run() {
         commands::greet,
         commands::get_launcher_version,
         commands::get_game_list,
+        commands::get_game,
         commands::download,
         commands::launch,
-        commands::get_game
     ]);
 
     ///### Application building
