@@ -12,7 +12,7 @@ function gameList({games}: GameListProps) {
     return (
         <div className='gameList'>
             {/* Launcher logo */}
-            <img src="/TechNet_Game_Launcher.png" alt=""/>
+            <img src="/VertexLauncherSplashScreen.png" alt=""/>
             <span></span>
             {/* Packing of all games*/}
             <div className='games-scroll'>

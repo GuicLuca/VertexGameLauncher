@@ -71,7 +71,7 @@
       "icons/icon.ico"
     ],
     "resources": [
-      "../public/TechNet_Game_Launcher.png"
+      "../public/VertexLauncherSplashScreen.png"
     ]
   }
 }
