@@ -26,6 +26,10 @@ function App() {
         setGames(JSON.parse(event.payload as string));
         // select the game that was selected before
         let updated_selected_game = games.find((game) => {
+            if (selectedGame === null){
+                return games[0];
+            }
+            
             return game.id === selectedGame.id;
         });
 

@@ -7,7 +7,7 @@ use tauri::{App, AppHandle, Manager};
 pub fn setup_system_tray(app: &App) -> Result<(), Box<dyn std::error::Error>> {
     TrayIconBuilder::with_id("tray")
         .icon(app.default_window_icon().unwrap().clone())
-        .menu_on_left_click(false)
+        .show_menu_on_left_click(false)
         .on_menu_event(|app, event| match on_tray_menu_event(app, event) {
             Ok(_) => (),
             Err(e) => eprintln!("Error handling tray menu event: {:?}", e),
