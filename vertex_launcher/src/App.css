@@ -1,0 +1,361 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+body {
+  margin: 0;
+  font-family: "Poppins";
+}
+
+.logo.vite:hover {
+  filter: drop-shadow(0 0 2em #747bff);
+}
+
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafb);
+}
+
+:root {
+  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+  color: #0f0f0f;
+  background-color: #f6f6f6;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+.container {
+  margin: 0;
+  padding-top: 10vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: 0.75s;
+}
+
+.logo.tauri:hover {
+  filter: drop-shadow(0 0 2em #24c8db);
+}
+
+.row {
+  display: flex;
+  justify-content: center;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+
+a:hover {
+  color: #535bf2;
+}
+
+h1 {
+  text-align: center;
+}
+
+input,
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  color: #0f0f0f;
+  background-color: #ffffff;
+  transition: border-color 0.25s;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+}
+
+button {
+  cursor: pointer;
+}
+
+button:hover {
+  border-color: #396cd8;
+}
+
+button:active {
+  border-color: #396cd8;
+  background-color: #e8e8e8;
+}
+
+input,
+button {
+  outline: none;
+}
+
+#greet-input {
+  margin-right: 5px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color: #f6f6f6;
+    background-color: #2f2f2f;
+  }
+  a:hover {
+    color: #24c8db;
+  }
+  input,
+  button {
+    color: #ffffff;
+    background-color: rgba(15, 15, 15, 0.5960784314);
+  }
+  button:active {
+    background-color: rgba(15, 15, 15, 0.4117647059);
+  }
+}
+.btn-strd {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 225px;
+  height: 75px;
+  background-color: #2A2A40;
+  border-radius: 16px;
+  margin: 0 auto;
+  color: #E0E0E6;
+  font-size: 1.4em;
+  transition: all 0.3s;
+}
+.btn-strd:hover {
+  transition: all 0.3s;
+  background-color: #4A6A9C;
+  cursor: pointer;
+}
+
+.launcher {
+  display: flex;
+}
+
+.gameList {
+  width: 30%;
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  background-color: #1C1C28;
+  height: 100vh;
+  color: #E0E0E6;
+}
+.gameList img {
+  align-items: center;
+  margin: 0 auto;
+  max-width: 120px;
+}
+.gameList .launcher-logo {
+  height: 3.5em;
+  max-width: 100%;
+  padding: 16px 0px 0px 0px;
+}
+.gameList .game-logo {
+  height: 90px;
+}
+.gameList span {
+  height: 2px;
+  margin: 8px 4px;
+  margin-bottom: 0;
+  background-color: #2F2F45;
+}
+.gameList .active-game {
+  background: linear-gradient(to right, rgba(190, 190, 190, 0.368627451) 0%, rgba(151, 151, 151, 0) 90%);
+  border-left: 2px solid #B0B0C3;
+}
+.gameList .games-scroll {
+  overflow-y: auto;
+  scrollbar-width: thin;
+  overflow-x: hidden;
+  scrollbar-color: #2F2F45 #1C1C28;
+  direction: rtl;
+}
+.gameList .games {
+  direction: ltr;
+  padding-top: 8px;
+}
+.gameList .games .game {
+  display: flex;
+  padding: 0 5%;
+  color: #E0E0E6;
+  width: 90%;
+  cursor: pointer;
+}
+.gameList .games .game img {
+  width: 20%;
+  margin: 0;
+  -o-object-fit: contain;
+     object-fit: contain;
+  padding: 0 0;
+}
+.gameList .games .game div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0 5%;
+  max-width: 60%;
+}
+.gameList .games .game div h3 {
+  margin: 0;
+}
+.gameList .games .game div p {
+  margin: 0;
+  font-size: 0.6em;
+}
+.gameList .option {
+  position: absolute;
+  width: 175px;
+  height: 50px;
+  bottom: 16px;
+  left: 50%;
+  translate: -50%;
+}
+
+.gamePage {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.gamePage .infoGame {
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  color: #E0E0E6;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  color: #E0E0E6;
+}
+.gamePage .infoGame .background-img {
+  z-index: -10;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.gamePage .infoGame .title {
+  -webkit-backdrop-filter: blur(4px);
+          backdrop-filter: blur(4px);
+  padding: 16px 0;
+}
+.gamePage .infoGame .title h1 {
+  text-shadow: 1px 1px 7px rgba(255, 255, 255, 0.41);
+  font-size: 3.2em;
+  margin: 0;
+  line-height: 1;
+}
+.gamePage .infoGame .title h1 + h3 {
+  text-align: center;
+  margin: 0;
+  font-weight: 300;
+}
+.gamePage .infoGame .infos-jeu {
+  display: flex;
+  margin: 2%;
+  width: 90%;
+}
+.gamePage .infoGame .infos-jeu div {
+  border: 1px solid #B0B0C3;
+  max-height: 200px;
+  padding: 16px;
+  width: 40%;
+  border-radius: 16px;
+  background-color: rgba(0, 0, 0, 0.7);
+  text-overflow: ellipsis;
+}
+.gamePage .infoGame .infos-jeu div h3 {
+  margin-top: 0;
+}
+.gamePage .infoGame .infos-jeu div p {
+  max-height: 170px;
+  overflow-y: auto;
+  scrollbar-color: #2F2F45 rgba(0, 0, 0, 0);
+  scrollbar-width: thin;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+}
+.gamePage .infoGame .game-feat {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  max-width: 60%;
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 0 8px;
+  border-radius: 16px;
+}
+.gamePage .infoGame .game-feat > div {
+  padding: 4px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.gamePage .infoGame .game-feat > div h3 {
+  margin: 4px 0;
+}
+.gamePage .infoGame .game-feat > div div {
+  display: flex;
+  flex-wrap: wrap;
+}
+.gamePage .infoGame .game-feat > div div p {
+  margin: 0;
+  margin-right: 32px;
+  white-space: nowrap;
+}
+.gamePage .infoGame .start-btn {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+}
+.gamePage .infoGame .start-btn p {
+  margin: 0;
+  font-size: 0.4em;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  translate: -50%;
+}
+.gamePage .download-progress {
+  display: flex;
+  position: relative;
+  text-align: left;
+  font-family: Arial, sans-serif;
+}
+.gamePage .download-progress h3 {
+  margin: auto 32px;
+}
+.gamePage .download-progress .progress-bar-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: -10;
+  background-color: #2A2A40;
+  overflow: hidden;
+}
+.gamePage .download-progress .progress-bar-container .progress-bar {
+  transition: width 0.3s ease;
+  height: 100%;
+}
+.gamePage .download-progress .download-info {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+.gamePage .download-progress .download-info p {
+  margin: 0.2rem 8px;
+}
+.gamePage .download-progress .download-info strong {
+  color: white;
+}/*# sourceMappingURL=App.css.map */

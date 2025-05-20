@@ -1,0 +1,49 @@
+[package]
+name = "vertex_launcher"
+version = "0.1.0"
+description = "Vertex is a free and open source customizable game launcher for indee dev that want to make all their game downloadable from one place."
+authors = ["Lucas Guichard <lucasguichard127@gmail.com>"]
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+# The `_lib` suffix may seem redundant, but it is necessary
+# to make the lib name unique and wouldn't conflict with the bin name.
+# This seems to be only an issue on Windows, see https://github.com/rust-lang/cargo/issues/8519
+name = "vertex_launcher_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+
+[profile.release]
+codegen-units = 1 # Allows LLVM to perform better optimization.
+lto = true # Enables link-time-optimizations.
+opt-level = "s" # Prioritizes small binary size. Use `3` if you prefer speed.
+panic = "abort" # Higher performance by disabling panic handlers.
+strip = true # Ensures debug symbols are removed.
+
+
+[build-dependencies]
+tauri-build = { version = "2.0.0", features = [] }
+
+
+[dependencies]
+tauri = { version = "2.0.0", features = ["protocol-asset", "tray-icon"] }
+tokio = "1.41.1"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2.0.12"
+log = { version = "0.4", features = [] }
+lazy_static = "1.5.0" # used to initialize config value that has non-const default value.
+tauri-plugin-shell = "2.0.0"
+tauri-plugin-http = { version = "2", features = ["default", "charset", "stream"] }
+tauri-plugin-store = "2"
+tauri-plugin-log = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v2", features = ["colored"] }
+tauri-plugin-fs = "2"
+futures-util = "0.3.31"
+zip-extract = "0.2.1"
+notifica = "3.0.2"
+
+[target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
+tauri-plugin-single-instance = "2"
+

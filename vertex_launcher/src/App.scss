@@ -1,0 +1,424 @@
+// Neutrals (Background & Text)
+$background-color: #1C1C28;
+$secondary-background-color: #2A2A40;
+$text-primary: #E0E0E6;
+$text-secondary: #B0B0C3;
+
+// Accents
+$primary-accent: #5C80BC;
+$secondary-accent: #FF7657;
+$tertiary-accent: #79D970;
+
+// Hover Effects
+$background-hover: #2F2F45;
+$button-hover: #4A6A9C;
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+body {
+  margin: 0;
+  font-family: 'Poppins';
+}
+
+.logo.vite:hover {
+  filter: drop-shadow(0 0 2em #747bff);
+}
+
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafb);
+}
+
+:root {
+  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+
+  color: #0f0f0f;
+  background-color: #f6f6f6;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+.container {
+  margin: 0;
+  padding-top: 10vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: 0.75s;
+}
+
+.logo.tauri:hover {
+  filter: drop-shadow(0 0 2em #24c8db);
+}
+
+.row {
+  display: flex;
+  justify-content: center;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+
+a:hover {
+  color: #535bf2;
+}
+
+h1 {
+  text-align: center;
+}
+
+input,
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  color: #0f0f0f;
+  background-color: #ffffff;
+  transition: border-color 0.25s;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+}
+
+button {
+  cursor: pointer;
+}
+
+button:hover {
+  border-color: #396cd8;
+}
+
+button:active {
+  border-color: #396cd8;
+  background-color: #e8e8e8;
+}
+
+input,
+button {
+  outline: none;
+}
+
+#greet-input {
+  margin-right: 5px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color: #f6f6f6;
+    background-color: #2f2f2f;
+  }
+
+  a:hover {
+    color: #24c8db;
+  }
+
+  input,
+  button {
+    color: #ffffff;
+    background-color: #0f0f0f98;
+  }
+
+  button:active {
+    background-color: #0f0f0f69;
+  }
+}
+
+.btn-strd {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 225px;
+  height: 75px;
+  background-color: $secondary-background-color;
+  border-radius: 16px;
+  margin: 0 auto;
+  color: $text-primary;
+  font-size: 1.4em;
+  transition: all 0.3s;
+
+  &:hover {
+    transition: all 0.3s;
+    background-color: $button-hover;
+    cursor: pointer;
+  }
+}
+
+.launcher {
+  display: flex;
+}
+
+.gameList {
+  width: 30%;
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  background-color: $background-color;
+  height: 100vh;
+  color: $text-primary;
+
+  img {
+    align-items: center;
+    margin: 0 auto;
+    max-width: 120px;
+  }
+  
+  .launcher-logo {
+    height: 3.5em;
+    max-width: 100%;
+    padding: 16px 0px 0px 0px;
+  }
+
+  .game-logo {
+    height: 90px;
+  }
+
+  span {
+    height: 2px;
+    margin: 8px 4px;
+    margin-bottom: 0;
+    background-color: $background-hover;
+  }
+
+  .active-game {
+    background: linear-gradient(to right, #bebebe5e 0%, #97979700 90%);
+    border-left: 2px solid $text-secondary;
+  }
+
+  .games-scroll {
+    overflow-y: auto;
+    scrollbar-width: thin;
+    overflow-x: hidden;
+    scrollbar-color: $background-hover $background-color;
+    direction: rtl;
+  }
+
+
+  .games {
+    direction: ltr;
+    padding-top: 8px;
+    // Uncomment this line if you want to used the option butotn
+    //padding-bottom: 100px;
+
+    .game {
+      display: flex;
+      padding: 0 5%;
+      color: $text-primary;
+      width: 90%;
+      cursor: pointer;
+
+      img {
+        width: 20%;
+        margin: 0;
+        object-fit: contain;
+        padding: 0 0;
+      }
+
+      div {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin: 0 5%;
+        max-width: 60%;
+
+        h3 {
+          margin: 0;
+        }
+
+        p {
+          margin: 0;
+          font-size: 0.6em;
+        }
+      }
+    }
+  }
+
+  .option {
+    position: absolute;
+    width: 175px;
+    height: 50px;
+    bottom: 16px;
+    left: 50%;
+    translate: -50%;
+  }
+}
+
+.gamePage {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  .infoGame {
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    color: $text-primary;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.40);
+    color: $text-primary;
+
+
+    .background-img {
+      z-index: -10;
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .title {
+      backdrop-filter: blur(4px);
+      padding: 16px 0;
+
+      h1 {
+        text-shadow: 1px 1px 7px rgba(255, 255, 255, 0.41);
+        font-size: 3.2em;
+        margin: 0;
+        line-height: 1;
+
+        + h3 {
+          text-align: center;
+          margin: 0;
+          font-weight: 300;
+        }
+      }
+    }
+
+    .infos-jeu {
+      display: flex;
+      // justify-content: space-around;
+      margin: 2%;
+      width: 90%;
+
+      div {
+        border: 1px solid $text-secondary;
+        max-height: 200px;
+        padding: 16px;
+        width: 40%;
+        border-radius: 16px;
+        background-color: rgba(0, 0, 0, 0.7);
+        text-overflow: ellipsis;
+
+        h3 {
+          margin-top: 0;
+        }
+
+        p {
+          max-height: 170px;
+          overflow-y: auto;
+          scrollbar-color: $background-hover rgba(0, 0, 0, 0);
+          scrollbar-width: thin;
+          overflow-x: hidden;
+          text-overflow: ellipsis;
+          margin: 0;
+        }
+      }
+    }
+
+    .game-feat {
+      position: absolute;
+      bottom: 16px;
+      left: 16px;
+      max-width: 60%;
+      background-color: rgba(0, 0, 0, 0.8);
+      padding: 0 8px;
+      border-radius: 16px;
+
+      > div {
+        padding: 4px 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        h3 {
+          margin: 4px 0;
+        }
+
+        div {
+          display: flex;
+          flex-wrap: wrap;
+
+          p {
+            margin: 0;
+            margin-right: 32px;
+            white-space: nowrap;
+          }
+        }
+      }
+    }
+
+    .start-btn {
+      position: absolute;
+      bottom: 16px;
+      right: 16px;
+
+      p {
+        margin: 0;
+        font-size: 0.4em;
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        translate: -50%;
+      }
+    }
+  }
+
+  .download-progress {
+    display: flex;
+    position: relative;
+    text-align: left;
+    font-family: Arial, sans-serif;
+
+    h3 {
+      margin: auto 32px;
+    }
+
+    .progress-bar-container {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: -10;
+      background-color: $secondary-background-color;
+      overflow: hidden;
+
+      .progress-bar {
+        transition: width 0.3s ease;
+        height: 100%;
+      }
+    }
+
+
+    .download-info {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+
+      p {
+        margin: 0.2rem 8px;
+      }
+    }
+
+    .download-info strong {
+      color: white;
+    }
+
+  }
+}
