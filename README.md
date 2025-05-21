@@ -1,4 +1,4 @@
-# Vertex Launcher
+![](vertex_launcher/public/VertexLauncherSplashScreen.png)
 
 ___
 ## What is Vertex?
@@ -73,6 +73,18 @@ the key `games` which is an array of game object. Here is an example with on gam
 
 Once achieved, locate the environment variable file at `vertex_launcher/src-tauri/src/env.rs`, 
 and update the value of the `ONLINE_CONFIGURATION_FILE` variable with the public link to your central configuration file.
+
+Then, all you need is to compile the project using the following command : `cargo tauri build`.
+
+___
+
+## Customization
+
+Vertex launcher is distributed with a default set of icons and slashscreens that are free to use or that you can replace with yours. Go to `vertex_launcher/src-tauri/icons` and change all the files except `icon.icns`.
+
+The splashscreen is located in `vertex_launcher/public/`.
+
+To customize the launcher UI, feel free to update the `vertex_launcher/src/App.scss` file according to your needs.
 
 ___
 
