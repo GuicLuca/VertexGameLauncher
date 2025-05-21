@@ -80,7 +80,7 @@ ___
 
 ## Customization
 
-Vertex launcher is distributed with a default set of icons and slashscreens that are free to use or that you can replace with yours. Go to `vertex_launcher/src-tauri/icons` and change all the files except `icon.icns`.
+Vertex launcher is distributed with a default set of icons and splashscreens that are free to use or that you can replace with yours. Go to `vertex_launcher/src-tauri/icons` and change all the files except `icon.icns`.
 
 The splashscreen is located in `vertex_launcher/public/`.
 
